@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+autopep8 = "*"
+
+[packages]
+django = "*"
+pillow = "*"
+django-crispy-forms = "*"
+psycopg2 = "*"
+gdal = {path = "./GDAL-3.0.4-cp37-cp37m-win32.whl"}
+
+[requires]
+python_version = "3.7"

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% if title %}
+    <title>Projet 13 - {{ title }} </title>
+    {% else %}
+    <title>Projet 13 </title>
+    {% endif %}
+</head>
+
+<body id="page-top">
+    <!-- Navigation -->
+    <!-- <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div class="container" style="background-color: aqua; height: 100px;">
+
+        </div>
+    </nav> -->
+    <header class="masthead">
+        <div class="container h-100" style="height: 100px; background-color: blueviolet;">
+
+        </div>
+      </header>
+
+    {% block content %}{% endblock %}
+    <br>
+
+    <footer class="bg-light py-5">
+        <div class="container" style="height: 50px; background-color: blue;"> </div>
+    </footer>
+
+</body>
+
+</html>

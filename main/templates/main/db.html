@@ -1,0 +1,46 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<!-- Masthead -->
+<header class="header-product" id="about">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2 class="text-white mt-0">We've got what you need!</h2>
+        <hr class="divider light my-4">
+        <p class="text-white-50 mb-4">Start Bootstrap has everything you need to get your new website up and running
+          in no time! Choose one of our open source, free to download, and easy to use themes! No strings attached!
+        </p>
+        <a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <section>
+    <h1 class="mt-2">Django People</h1><br><br><br>
+    <div class="row justify-content-center">
+
+      {% for prod in products %}
+      <div class="col-lg-4 col-md-12">
+        <div class="box">
+          <div class="parent">
+            {% with 'blog/img/nutriscore-'|add:prod.nutriscore|add:'.svg' as image_static %}
+            <img class="image1" id="image1" src="{% static image_static %}" />
+            {% endwith %}
+            <div class="image2">
+              <img src="{{ prod.mini_image }}" />
+            </div>
+          </div>
+          <div class="texte" style="text-align: center">{{ prod.product_name }} <br><i class="far fa-save "></i>
+            Sauvegarder</div>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </section>
+</div>
+
+{% endblock content %}
