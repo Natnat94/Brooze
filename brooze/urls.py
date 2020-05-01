@@ -19,15 +19,26 @@ from django.urls import path
 from main import views as main
 from authentification import views as auth
 from shops import views
+from django.conf.urls import url
+from djgeojson.views import GeoJSONLayerView
+from authentification.models import User
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main.index, name='index'),
+    path('', main.index, name='home'),
     path('register/', auth.register, name='register'),
-    path('login/', auth_views.LoginView.as_view(template_name='authentification/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(
+        template_name='authentification/login.html'), name='login'),
     path('profil/', auth.profil, name='profil'),
     path('profil/password/', auth.change_password, name='change_password'),
-    path('login/', auth_views.LoginView.as_view(template_name='authentification/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='authentification/logout.html'), name='logout'),
+    path('login/', auth_views.LoginView.as_view(
+        template_name='authentification/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(
+        template_name='authentification/logout.html'), name='logout'),
     path('test/', views.Home.as_view()),
+    url(r'^data.geojson$', views.geolala, name='data'),
+    url(r'^data.geojson2$', GeoJSONLayerView.as_view(
+        model=User,
+        geometry_field='location',
+        properties=('id')), name='data2'),
 ]

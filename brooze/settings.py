@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'shops',
     'crispy_forms',
     'user_profiles',
+    'leaflet',
+    'djgeojson',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +147,9 @@ AUTH_USER_MODEL = 'authentification.User'
 
 STATIC_URL = '/static/'
 
+LEAFLET_CONFIG = {
+  'DEFAULT_CENTER': (48.85,2.35),
+  'DEFAULT_ZOOM': 15,
+  'MIN_ZOOM': 1,
+  'MAX_ZOOM': 20,
+}
