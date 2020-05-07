@@ -62,9 +62,12 @@ INSTALLED_APPS = [
     'user_profiles',
     'leaflet',
     'djgeojson',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # new
+    'django.middleware.common.CommonMiddleware', # new
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -146,6 +149,7 @@ AUTH_USER_MODEL = 'authentification.User'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 LEAFLET_CONFIG = {
   'DEFAULT_CENTER': (48.85,2.35),
@@ -153,3 +157,7 @@ LEAFLET_CONFIG = {
   'MIN_ZOOM': 1,
   'MAX_ZOOM': 20,
 }
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
