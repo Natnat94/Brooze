@@ -5,13 +5,18 @@ verify_ssl = true
 
 [dev-packages]
 autopep8 = "*"
+flake8 = "*"
 
 [packages]
 django = "*"
 pillow = "*"
 django-crispy-forms = "*"
 psycopg2 = "*"
-gdal = {path = "./GDAL-3.0.4-cp37-cp37m-win32.whl"}
+django-leaflet = "*"
+six = "*"
+django-geojson = "*"
+coverage = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
