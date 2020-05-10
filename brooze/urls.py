@@ -36,9 +36,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(
         template_name='authentification/logout.html'), name='logout'),
     path('test/', views.Home.as_view()),
-    url(r'^data.geojson$', views.geolala, name='data'),
-    url(r'^data.geojson2$', GeoJSONLayerView.as_view(
+    path('data.geojson', views.api, name='data'),
+    path('data.geojson2', GeoJSONLayerView.as_view(
         model=User,
-        geometry_field='location',
+        geometry_field='geom',
         properties=('id')), name='data2'),
 ]
