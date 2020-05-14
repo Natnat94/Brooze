@@ -32,19 +32,24 @@ class Matchmaker:
             ranked_list.append(shop)
         return ranked_list
 
-    def find_shop(self):
+    def find_shop(self, id):
         """ sum the overall score of the shops listed and print return
         the shop with the higher score """
-        # il manque la possibilité de lister la liste des amis de l'utilisateur
-        users = [1, 2, 3]
+        current_user = User.objects.get(pk=id)
+
+        users = [id,]
         final_dict = {}
         temp_list = []
+
+        for i in current_user.friends.all():
+            users.append(i.id)
 
         for user in users:
             user = self.ranked_list(user)  # Frienddealer(1).friends_list
             for i in user:
                 final_dict[i['id']] = 0
                 temp_list.append({i['id']: i['rank']})
+                
         for i in temp_list:
             for key, value in i.items():
                 final_dict[key] = final_dict[key] + value
