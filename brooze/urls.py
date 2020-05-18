@@ -16,20 +16,12 @@ Including another URLconf
 from django.contrib.gis import admin
 from django.urls import path, include
 from main import views as main
-from djgeojson.views import GeoJSONLayerView
-from authentification.models import User
+
 
 urlpatterns = [
     path('', main.index, name='home'),
     path('admin/', admin.site.urls),
     path('auth/', include('authentification.urls')),
     path('map/', include('shops.urls')),
-    path('data.geojson2', GeoJSONLayerView.as_view(
-        model=User,
-        geometry_field='geom',
-        properties=('id')), name='data2'),  # tout les utilisateur de l'appli en bleu
-    # user/<int:pk>
-    # user/<int:pk>/update
-    # shop/all
-    # shop/<int:user_id>/match
+    path('user/', include('main.urls')),
 ]
