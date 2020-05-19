@@ -77,12 +77,12 @@ def login(request):
 
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
-""" this function logout the logged user by removing
-the auth token attached to the user from the system and return a
-success message.
-the key needed is: 'Authorization' in the header with a value
-that is in this form: 'Token ~the token id~' """
 def logout(request):
+    """ this function logout the logged user by removing
+    the auth token attached to the user from the system and return a
+    success message.
+    the key needed is: 'Authorization' in the header with a value
+    that is in this form: 'Token ~the token id~' """
     request.auth.delete()
     username = request.user.username
     return Response({"message": f"{username} is logged out"})
@@ -90,11 +90,11 @@ def logout(request):
 
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
-""" this function change the password of the user and return
-a success message with a new auth token.
-the keys needed are: 'old_password', 'new_password1', 'new_password2',
-'Authorization' """
 def change_password(request):
+    """ this function change the password of the user and return
+    a success message with a new auth token.
+    the keys needed are: 'old_password', 'new_password1', 'new_password2',
+    'Authorization' """
     form = PasswordChangeForm(request.user, request.POST)
     if form.is_valid():
         user = form.save()
