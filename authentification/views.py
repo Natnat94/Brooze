@@ -23,6 +23,10 @@ from authentification.models import User
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def register(request):
+    """ This function register the user with the validated data sent
+    and return a succes message with a auth token.
+    the keys needed are: 'username', 'password1, 'password2'
+    where 'username' is valid email format"""
     form = UserRegisterForm(request.POST)
     if form.is_valid():
         form.save()
@@ -47,6 +51,9 @@ def register(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def login(request):
+    """ this function login the user into the system and return the
+    user primay key, the username and the auth token.
+    the keys needed are: 'username', 'password' """
     username = request.data.get("username")
     password = request.data.get("password")
     if username is None or password is None:
@@ -70,6 +77,11 @@ def login(request):
 
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
+""" this function logout the logged user by removing
+the auth token attached to the user from the system and return a
+success message.
+the key needed is: 'Authorization' in the header with a value
+that is in this form: 'Token ~the token id~' """
 def logout(request):
     request.auth.delete()
     username = request.user.username
@@ -78,6 +90,10 @@ def logout(request):
 
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
+""" this function change the password of the user and return
+a success message with a new auth token.
+the keys needed are: 'old_password', 'new_password1', 'new_password2',
+'Authorization' """
 def change_password(request):
     form = PasswordChangeForm(request.user, request.POST)
     if form.is_valid():

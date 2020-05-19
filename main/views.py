@@ -16,16 +16,21 @@ def index(request):
 
 @api_view()
 @permission_classes([IsAuthenticated])
-def user_detail(request, pk):
-    user = User.objects.filter(pk=pk)
+def user_detail(request):
+    """ this function return the authenticated user's details in
+    GEOJSON format"""
+    user = User.objects.filter(auth_token=request.auth)
     response_data = serialize("geojson", user, fields=('username', 'first_name', 'last_name', 'image', 'friends'))
     return HttpResponse(response_data, content_type="json")
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def update_user_location(request, pk):
-    user = User.objects.filter(pk=pk)  # Selectionne l'utilisateur
+def update_user_location(request):
+    """ this function update the authenticated user's position in the DB
+    and return the updated profile.
+    The keys needed are: 'long', 'lat' """
+    user = User.objects.filter(auth_token=request.auth)  # Selectionne l'utilisateur
     data = json.loads(request.body)  # charge le contenu JSON de POST
     # print(data)
     pnt = Point(
