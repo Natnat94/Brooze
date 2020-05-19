@@ -18,7 +18,7 @@ def index(request):
 @permission_classes([IsAuthenticated])
 def user_detail(request, pk):
     user = User.objects.filter(pk=pk)
-    response_data = serialize("geojson", user)
+    response_data = serialize("geojson", user, fields=('username', 'first_name', 'last_name', 'image', 'friends'))
     return HttpResponse(response_data, content_type="json")
 
 
