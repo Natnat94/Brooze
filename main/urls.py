@@ -9,8 +9,8 @@ from .views import (
 
 
 urlpatterns = [
-    path('<int:pk>/', user_detail),  # display the user details
-    path('<int:pk>/update/', update_user_location),  # update the user location in the DB
+    path('', user_detail),  # display the user details
+    path('update/', update_user_location),  # update the user location in the DB
     path('friends_list/', GeoJSONLayerView.as_view(
         model=User,
         geometry_field='geom',
