@@ -12,15 +12,15 @@ class TestViews(TestCase):
     def setUpTestData(cls):
         pnt = GEOSGeometry('POINT(7 24)')
         cls.test_user = User.objects.create_user(
-            username='1@g.com', password='1X<ISRUkw+tuK', location=pnt)
+            username='1@g.com', password='1X<ISRUkw+tuK', geom=pnt)
 
         pnt = GEOSGeometry('POINT(10 28)')
         cls.test_user = User.objects.create_user(
-            username='2@g.com', password='1X<ISRUkw+tuK', location=pnt)
+            username='2@g.com', password='1X<ISRUkw+tuK', geom=pnt)
 
         pnt = GEOSGeometry('POINT(3 26)')
         cls.test_user = User.objects.create_user(
-            username='3@g.com', password='1X<ISRUkw+tuK', location=pnt)
+            username='3@g.com', password='1X<ISRUkw+tuK', geom=pnt)
 
         pnt = GEOSGeometry('POINT(4 28)')
         cls.shop = Shops.objects.create(
@@ -40,7 +40,8 @@ class TestViews(TestCase):
     def test_run_query_user_1(self):
         """ test that the query return an ordered list of shops
         from the closest to the more far away """
-        query = match_maker.run_query(1)
+        user = User.objects.get(username='1@g.com')
+        query = match_maker.run_query(user.pk)
 
         self.assertEqual(query[0].name, 'shop 3')
         self.assertEqual(query[1].name, 'shop 2')
@@ -49,7 +50,8 @@ class TestViews(TestCase):
         """ same as the previous test, is used for validate the
         user number 2 position for the sake of 'find_shop' method
         test """
-        query = match_maker.run_query(2)
+        user = User.objects.get(username='2@g.com')
+        query = match_maker.run_query(user.pk)
 
         self.assertEqual(query[0].name, 'shop 3')
         self.assertEqual(query[1].name, 'shop 1')
@@ -58,7 +60,8 @@ class TestViews(TestCase):
         """ same as the previous test, is used for validate the
         user number 3 position for the sake of the 'find_shop' method
         test """
-        query = match_maker.run_query(3)
+        user = User.objects.get(username='3@g.com')
+        query = match_maker.run_query(user.pk)
 
         self.assertEqual(query[0].name, 'shop 2')
         self.assertEqual(query[1].name, 'shop 1')
@@ -66,7 +69,8 @@ class TestViews(TestCase):
     def test_ranked_list(self):
         """ test that the method return a correct ranked list
         of shops according to the distance from the user """
-        query = match_maker.ranked_list(1)
+        user = User.objects.get(username='1@g.com')
+        query = match_maker.ranked_list(user.pk)
         self.assertEqual(query[0]['rank'], 3)
         self.assertEqual(query[1]['rank'], 2)
         self.assertEqual(query[2]['rank'], 1)
@@ -75,6 +79,7 @@ class TestViews(TestCase):
         """ test the logic of the method with 3 users by asserting
         that a specific shop is the best match regarding all 3 users
         position relative to all shops """
-        query = match_maker.find_shop()
+        user = User.objects.get(username='1@g.com')
+        query = match_maker.find_shop(user.pk)
 
         self.assertEqual(query, 3)
