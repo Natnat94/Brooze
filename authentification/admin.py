@@ -10,7 +10,7 @@ class rien(admin.OSMGeoAdmin):
     default_lon = 255422.57162517
     # modifiable = False
     list_display = ('username','is_staff','is_active')
-    fields = ['username', ('first_name', 'last_name', 'email'), ('location', 'friends')]
+    fields = ['username', ('first_name', 'last_name', 'email'), ('geom', 'friends')]
 
 admin.site.register(User, rien)
 admin.site.unregister(Group)
