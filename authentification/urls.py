@@ -14,5 +14,5 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('password/', change_password, name='change_password'),
     path('logout/', logout, name='logout'),
-    # path('profil/', profil, name='profil'),  # a modifier !!
+    path('profil/', profil, name='profil'),
 ]
