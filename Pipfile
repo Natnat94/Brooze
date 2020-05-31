@@ -17,6 +17,9 @@ six = "*"
 django-geojson = "*"
 coverage = "*"
 django-cors-headers = "*"
+djangorestframework = "*"
+djangorestframework-gis = "*"
+autopep8 = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "*"
