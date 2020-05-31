@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "main",
     "shops",
     "crispy_forms",
-    "user_profiles",
     "leaflet",
     "djgeojson",
     "corsheaders",
