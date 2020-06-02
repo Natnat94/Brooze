@@ -19,9 +19,10 @@ from main import views as main
 
 
 urlpatterns = [
-    path('', main.index, name='home'),
-    path('admin/', admin.site.urls),
-    path('auth/', include('authentification.urls')),
-    path('map/', include('shops.urls')),
-    path('user/', include('main.urls')),
+    path('api', main.index, name='home'),
+    path('api/django/', include('rest_framework.urls')),
+    path('api/admin/', admin.site.urls),
+    path('api/auth/', include('authentification.urls')),
+    path('api/map/', include('shops.urls')),
+    path('api/user/', include('main.urls')),
 ]
