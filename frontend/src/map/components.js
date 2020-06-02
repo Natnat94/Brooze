@@ -8,7 +8,7 @@ import { customMarkerYellow, customMarkerRed } from './customMarker';
 
 import './maprenderer.css';
 
-
+const mainurl = 'http://127.0.0.1:8000'
 
 //https://techiediaries.com/react-ajax
 
@@ -16,10 +16,10 @@ import './maprenderer.css';
 
 const locateOptions = {
   position: 'bottomright',
-  flyTo: true,
+  flyTo: false,
   setView: 'untilPan',
   locateOptions: {
-    maxZoom: 15,
+    maxZoom: 14,
     watch: true,   // if you overwrite this, visualization cannot be updated
     setView: false // have to set this to false because we have to
     // do setView manually
@@ -31,13 +31,116 @@ const locateOptions = {
 
 
 async function findMatch(position, token) {
-  await postData('http://127.0.0.1:8000/user/update/', position, token)
+  await postData(mainurl+'/user/update/', position, token)
     .then(data => {
       return data; // JSON data parsed by `response.json()` call
     })
     .then(console.log("la position est à jour"));
 }
 
+
+export class UnlogMap extends React.Component {
+  constructor(props) {
+    super(props);
+    //Default state to initialize leaflet map. Default center to Paris with zoom to 14
+    this.state = {
+      lat: 48.856613,
+      lng: 2.352222,
+      zoom: 14,
+      isLoading: true,
+    };
+  }
+
+
+  //Get asynchronously the GeoJSON Object, immediately after a component is mounted
+  async componentDidMount() {
+    //Connect to the api backend to get the GeoJSON Object.
+    this.json = await getData(mainurl+'/map/all', this.props.token);
+    
+
+    this.setState({
+      isLoading: false
+    });
+  }
+  //Template for rendering a loader
+  renderLoading() {
+    return (
+      <h4>Loading...</h4>
+    );
+  }
+
+  yellowPointer(point, latlng) {
+    return L.marker(latlng, { icon: customMarkerYellow })
+  }
+
+  redPointer(point, latlng) {
+    return L.marker(latlng, { icon: customMarkerRed })
+  }
+
+  displayBarname = (feature, layer) => {
+    layer.bindPopup("<h2>" + feature.properties.name + "</h2>");
+  }
+
+  displayUserName = (feature, layer) => {
+    layer.bindPopup("<h2>" + feature.properties.username + "</h2>");
+  }
+
+
+  //Template for rendering the GeoJSON data inside a leaflet map using react-leaflet component
+  renderGeoJSON() {
+    const position = [48.8597, 2.349];
+
+    return (
+      <div id="map">
+        <Map center={position} zoom={13} zoomControl={false} doubleClickZoom={false}>
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
+          <GeoJSON key={Math.random()} data={this.json} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />
+          <LocateControl options={locateOptions} startDirectly/>
+        </Map>
+      </div>
+    );
+  }
+
+
+  //Required method to render React elements 
+  render() {
+    return (
+      <div>
+        {this.state.isLoading ? this.renderLoading() : this.renderGeoJSON()}
+      </div>
+    );
+  }
+}
+
+
+function LoginButton(props) {
+  return (
+    <Control position="bottomright" >
+      <button onClick={props.onClick}>
+        Login
+    </button>
+    </Control>
+  );
+}
+
+function LogoutButton(props) {
+  return (<>
+    <Control position="bottomright" >
+      <button onClick={props.onClick}>
+        Logout
+    </button>
+    </Control>
+
+  </>
+  );
+}
+
+
+
+// ---------------------------------------------------------------------------------------------------------- //
 
 export class MapRenderer extends React.Component {
   constructor(props) {
@@ -59,9 +162,11 @@ export class MapRenderer extends React.Component {
   findCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
-        const location = {'long': position.coords.longitude, 
-                          'lat': position.coords.latitude,
-                          'timestamp': position.timestamp}
+        const location = {
+          'long': position.coords.longitude,
+          'lat': position.coords.latitude,
+          'timestamp': position.timestamp
+        }
         findMatch(location, this.props.token);
         this.setState({ rien: true })
       },
@@ -84,7 +189,7 @@ export class MapRenderer extends React.Component {
     this.json = await getData('http://127.0.0.1:8000/map/all', this.props.token);
     this.userdata = await getData('http://127.0.0.1:8000/user/', this.props.token);
     this.friendata = await getData('http://127.0.0.1:8000/user/friends_list/', this.props.token);
-    // this.bestmatch = await getData('http://127.0.0.1:8000/map/match/', this.props.token);
+    this.bestmatch = await getData('http://127.0.0.1:8000/map/match/', this.props.token);
     this.setState({
       lat: this.userdata.features[0].geometry.coordinates[1],
       lng: this.userdata.features[0].geometry.coordinates[0],
@@ -97,10 +202,10 @@ export class MapRenderer extends React.Component {
       <h4>Loading...</h4>
     );
   }
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.rien !== this.state.rien) {
-      this.bestmatch = await getData('http://127.0.0.1:8000/map/match/', this.props.token);
-          
+      this.bestmatch = getData('http://127.0.0.1:8000/map/match/', this.props.token);
+
       console.log('pokemons state has changed.');
     }
   }
@@ -137,7 +242,7 @@ export class MapRenderer extends React.Component {
           <GeoJSON key={Math.random()} data={this.json} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />
           <Control position="bottomright" >
             <button onClick={
-                this.findCoordinates
+              this.findCoordinates
             }>
               <i className="fa fa-smile-o fa-2x"></i>
             </button>
@@ -197,6 +302,7 @@ export class MapRenderer extends React.Component {
 
 
 
+
   addMarker = (e) => {
     console.log(e)
     const { markers } = this.state
@@ -207,31 +313,11 @@ export class MapRenderer extends React.Component {
   render() {
     return (
       <div>
-        {this.state.isLoading ? this.renderLoading() : [this.props.is_logged ? this.renderGeo() : this.renderGeoJSON()]}
+        {this.state.isLoading ? this.renderLoading() :  this.renderGeo() }
       </div>
     );
   }
-}
 
 
-function LoginButton(props) {
-  return (
-    <Control position="bottomright" >
-      <button onClick={props.onClick}>
-        Login
-    </button>
-    </Control>
-  );
-}
 
-function LogoutButton(props) {
-  return (<>
-    <Control position="bottomright" >
-      <button onClick={props.onClick}>
-        Logout
-    </button>
-    </Control>
-
-  </>
-  );
 }
