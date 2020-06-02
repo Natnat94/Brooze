@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .models import Shops
 from .engine import Matchmaker
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class Home(generic.ListView):
@@ -68,7 +68,7 @@ def api(request):
 
 
 @api_view()
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def shops_list(request):
     """ this method return the list and of all the shops registered
     in the DB.
