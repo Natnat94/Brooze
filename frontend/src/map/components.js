@@ -8,7 +8,7 @@ import { customMarkerYellow, customMarkerRed } from './customMarker';
 
 import './maprenderer.css';
 
-const mainurl = 'https://nathan-mimoun.site/api'
+const mainurl = 'https://nathan-mimoun.live/api'
 
 //https://techiediaries.com/react-ajax
 
