@@ -42,7 +42,7 @@ class SignUp extends React.Component {
 
 
     async sendLogin(data, token) {
-        await postData('http://127.0.0.1:8000/auth/register/', data, token)
+        await postData(this.props.mainurl + '/auth/register/', data, token)
             .then(data => {
                 console.log(data)
                 this.props.handler('is_logged', true);

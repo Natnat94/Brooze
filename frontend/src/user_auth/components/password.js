@@ -40,7 +40,7 @@ class PasswordChange extends React.Component {
     }
 
     async sendLogin(data, token) {
-        await postData('http://127.0.0.1:8000/auth/password/', data, token)
+        await postData(this.props.mainurl + '/auth/password/', data, token)
           .then(data => {
             console.log(data)
             this.setState({data})

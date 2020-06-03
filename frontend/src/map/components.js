@@ -8,11 +8,7 @@ import { customMarkerYellow, customMarkerRed } from './customMarker';
 
 import './maprenderer.css';
 
-let mainurl
 
-if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
-} else {mainurl =  'http://localhost:8000'
-}
 
 //https://techiediaries.com/react-ajax
 
@@ -35,7 +31,7 @@ const locateOptions = {
 
 
 async function findMatch(position, token) {
-  await postData(mainurl+'/user/update/', position, token)
+  await postData(this.props.mainurl+'/user/update/', position, token)
     .then(data => {
       return data; // JSON data parsed by `response.json()` call
     })
@@ -59,7 +55,7 @@ export class UnlogMap extends React.Component {
   //Get asynchronously the GeoJSON Object, immediately after a component is mounted
   async componentDidMount() {
     //Connect to the api backend to get the GeoJSON Object.
-    this.json = await getData(mainurl+'/map/all', this.props.token);
+    this.json = await getData(this.props.mainurl+'/map/all', this.props.token);
     
 
     this.setState({
@@ -190,10 +186,10 @@ export class MapRenderer extends React.Component {
   //Get asynchronously the GeoJSON Object, immediately after a component is mounted
   async componentDidMount() {
     //Connect to the api backend to get the GeoJSON Object.
-    this.json = await getData(mainurl+'/map/all', this.props.token);
-    this.userdata = await getData(mainurl+'/user/', this.props.token);
-    this.friendata = await getData(mainurl + '/user/friends_list/', this.props.token);
-    this.bestmatch = await getData(mainurl + '/map/match/', this.props.token);
+    this.json = await getData(this.props.mainurl+'/map/all', this.props.token);
+    this.userdata = await getData(this.props.mainurl+'/user/', this.props.token);
+    this.friendata = await getData(this.props.mainurl + '/user/friends_list/', this.props.token);
+    this.bestmatch = await getData(this.props.mainurl + '/map/match/', this.props.token);
     this.setState({
       lat: this.userdata.features[0].geometry.coordinates[1],
       lng: this.userdata.features[0].geometry.coordinates[0],
@@ -208,7 +204,7 @@ export class MapRenderer extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.rien !== this.state.rien) {
-      this.bestmatch = getData(mainurl + '/map/match/', this.props.token);
+      this.bestmatch = getData(this.props.mainurl + '/map/match/', this.props.token);
 
       console.log('pokemons state has changed.');
     }
