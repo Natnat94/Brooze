@@ -8,7 +8,11 @@ import { customMarkerYellow, customMarkerRed } from './customMarker';
 
 import './maprenderer.css';
 
-const mainurl = 'https://nathan-mimoun.live/api'
+let mainurl
+
+if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
+} else {mainurl =  'http://localhost:8000'
+}
 
 //https://techiediaries.com/react-ajax
 
@@ -89,7 +93,7 @@ export class UnlogMap extends React.Component {
   //Template for rendering the GeoJSON data inside a leaflet map using react-leaflet component
   renderGeoJSON() {
     const position = [48.8597, 2.349];
-
+    
     return (
       <div id="map">
         <Map center={position} zoom={13} zoomControl={false} doubleClickZoom={false}>
@@ -186,10 +190,10 @@ export class MapRenderer extends React.Component {
   //Get asynchronously the GeoJSON Object, immediately after a component is mounted
   async componentDidMount() {
     //Connect to the api backend to get the GeoJSON Object.
-    this.json = await getData('http://127.0.0.1:8000/map/all', this.props.token);
-    this.userdata = await getData('http://127.0.0.1:8000/user/', this.props.token);
-    this.friendata = await getData('http://127.0.0.1:8000/user/friends_list/', this.props.token);
-    this.bestmatch = await getData('http://127.0.0.1:8000/map/match/', this.props.token);
+    this.json = await getData(mainurl+'/map/all', this.props.token);
+    this.userdata = await getData(mainurl+'/user/', this.props.token);
+    this.friendata = await getData(mainurl + '/user/friends_list/', this.props.token);
+    this.bestmatch = await getData(mainurl + '/map/match/', this.props.token);
     this.setState({
       lat: this.userdata.features[0].geometry.coordinates[1],
       lng: this.userdata.features[0].geometry.coordinates[0],
@@ -204,7 +208,7 @@ export class MapRenderer extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.rien !== this.state.rien) {
-      this.bestmatch = getData('http://127.0.0.1:8000/map/match/', this.props.token);
+      this.bestmatch = getData(mainurl + '/map/match/', this.props.token);
 
       console.log('pokemons state has changed.');
     }

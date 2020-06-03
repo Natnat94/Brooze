@@ -23,8 +23,8 @@ export class NavBar extends React.Component {
         {this.props.is_logged ?
           (<>
             <a id="logout" className="menu-item" href="/" onClick={event => this.handleClick(event, null)}><i className="fa fa-fw fa-sign-out" /><span>Logout</span></a>
-            <a id="profil" className="menu-item" href="/"onClick={event => this.handleClick(event, 'password')}><i className="fa fa-fw fa-user" /><span>Profil</span></a>
-            <a id="friends" className="menu-item" href="/"onClick={event => this.handleClick(event, null)}><i className="fa fa-fw fa-address-book-o" /><span>Friends</span></a>
+            <a id="profil" className="menu-item" href="/" onClick={event => this.handleClick(event, 'password')}><i className="fa fa-fw fa-user" /><span>Profil</span></a>
+            <a id="friends" className="menu-item" href="/" onClick={event => this.handleClick(event, null)}><i className="fa fa-fw fa-address-book-o" /><span>Friends</span></a>
             {/* <a className="menu-item--small" href="/">Settings</a> */}
           </>) :
           (<>
