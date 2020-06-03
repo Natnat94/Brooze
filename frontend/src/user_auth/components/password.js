@@ -1,6 +1,17 @@
 import React from 'react';
 import {postData} from '../../map/ApiDataFunc'
 
+
+
+let mainurl
+
+if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
+} else {mainurl =  'http://localhost:8000'
+}
+
+
+
+
 class PasswordChange extends React.Component {
     constructor(props) {
         super(props);
@@ -40,7 +51,7 @@ class PasswordChange extends React.Component {
     }
 
     async sendLogin(data, token) {
-        await postData(this.props.mainurl + '/auth/password/', data, token)
+        await postData(mainurl + '/auth/password/', data, token)
           .then(data => {
             console.log(data)
             this.setState({data})

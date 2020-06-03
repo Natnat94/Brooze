@@ -1,6 +1,16 @@
 import React from 'react';
 import { postData } from '../../map/ApiDataFunc'
 
+
+let mainurl
+
+if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
+} else {mainurl =  'http://localhost:8000'
+}
+
+
+
+
 class SignUp extends React.Component {
     constructor(props) {
         super(props);
@@ -42,7 +52,7 @@ class SignUp extends React.Component {
 
 
     async sendLogin(data, token) {
-        await postData(this.props.mainurl + '/auth/register/', data, token)
+        await postData(mainurl + '/auth/register/', data, token)
             .then(data => {
                 console.log(data)
                 this.props.handler('is_logged', true);
