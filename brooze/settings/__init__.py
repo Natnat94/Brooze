@@ -39,12 +39,6 @@ SECRET_KEY = "6akl*%mxi$g6iijx8ioa+()+7edyg^_t*l4%@se11cd&9dfw_q"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# ----------------------------------------------
-ALLOWED_HOSTS = ["www.nathan-mimoun.live", "nathan-mimoun.live"]
-
-
-CORS_ORIGIN_ALLOW_ALL = True
-# ----------------------------------------------
 
 # Application definition
 

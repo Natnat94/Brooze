@@ -11,7 +11,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("SQLPWD"),
     }
 }
-
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 ALLOWED_HOSTS = ["www.nathan-mimoun.live", "nathan-mimoun.live"]
 
