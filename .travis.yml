@@ -3,8 +3,6 @@ language: python
 python:
  - '3.7'
 
-before_script:
- - pipenv install
 
 env : DJANGO_SETTINGS_MODULE="brooze.settings.travis"
 
@@ -24,6 +22,7 @@ addons:
       - postgresql-client-10
 before_script:
   - psql -U postgres -c "create extension postgis"
+  - pipenv install
 
 
 script:
