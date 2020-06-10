@@ -3,6 +3,8 @@ import { withLeaflet } from "react-leaflet";
 import Locate from "leaflet.locatecontrol";
 
 class LocateControl extends Component {
+  /* this compponent generate a live marker 
+  that display the current position of the user */
   componentDidMount() {
     const { options, startDirectly } = this.props;
     const { map } = this.props.leaflet;

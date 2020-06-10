@@ -12,6 +12,9 @@ if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.li
 
 
 class LogIn extends React.Component {
+    /* this component manage the Login part, it display 
+    a form that is sent by an AJAX POST call, which
+    on succeed, send back the 'token' that is set on state */
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +33,8 @@ class LogIn extends React.Component {
         event.preventDefault();
         this.sendLogin(this.state, "")
     }
-
+    // this function send the login data to the backend
+    // and return the response.
     async sendLogin(data, token) {
         await postData(mainurl + '/auth/login/', data, token)
             .then(data => {
@@ -45,7 +49,7 @@ class LogIn extends React.Component {
             })
 
     }
-
+    //Required method to render React elements 
     render() {
         return (
             <>

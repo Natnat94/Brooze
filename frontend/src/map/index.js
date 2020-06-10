@@ -1,18 +1,15 @@
 import React from 'react';
-import { UnlogMap, MapRenderer } from './components';
+import { UnlogMap } from './components';
 
 
 
 
 class Map extends React.Component {
+    /* this component gather the Map display components (will be removed) */
 
     render() {
         return (
-            <>
-            {this.props.is_logged ? <MapRenderer {...this.props} /> : <UnlogMap {...this.props} />}
-            
-            
-            </>
+           <UnlogMap {...this.props} />
         );
     }
 }

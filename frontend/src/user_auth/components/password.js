@@ -1,18 +1,23 @@
 import React from 'react';
-import {postData} from '../../map/ApiDataFunc'
+import { postData } from '../../map/ApiDataFunc'
 
 
 
 let mainurl
 
-if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
-} else {mainurl =  'http://localhost:8000'
+if (process.env.NODE_ENV === 'production') {
+    mainurl = 'https://nathan-mimoun.live/api'
+} else {
+    mainurl = 'http://localhost:8000'
 }
 
 
 
 
 class PasswordChange extends React.Component {
+    /* this component manage the Password Change part, it display 
+    a form that is sent by an AJAX POST call, which
+    on succeed, send back the new 'token' that is set on state */
     constructor(props) {
         super(props);
         this.state = {
@@ -31,35 +36,39 @@ class PasswordChange extends React.Component {
         if (nam === "new_password2") {
             if (val !== this.state.password1) {
                 err = <p>
-                <span id="isa_error">
-                    This is a warning alert—check it out!</span></p>;
+                    <span id="isa_error">
+                        Both passwords need to be identical !</span></p>;
             }
         }
         this.setState({ errormessage: err });
-        this.setState({[nam]: val });
+        this.setState({ [nam]: val });
     }
     mySubmitHandler = (event) => {
         event.preventDefault();
-        if (this.state.password1 !== this.state.password2) {}
+        if (this.state.password1 !== this.state.password2) { }
         else {
-        alert("You are submitting " + this.state.password1);
-        let data = {
-            old_password: this.state.password, 
-            new_password1: this.state.password1, 
-            new_password2: this.state.password2,}
-        this.sendLogin(data,"Token 8d3082a2926981efba07836f7c96ac3008d4ea58");}
+            alert("You are submitting " + this.state.password1);
+            let data = {
+                old_password: this.state.password,
+                new_password1: this.state.password1,
+                new_password2: this.state.password2,
+            }
+            this.sendLogin(data, this.props.token);
+        }
     }
 
-    async sendLogin(data, token) {
-        await postData(mainurl + '/auth/password/', data, token)
-          .then(data => {
-            console.log(data)
-            this.setState({data})
-            return data; // JSON data parsed by `response.json()` call
-          })
-          .then(console.log("le mot de passe est a jour"));
-      }
-
+    // this function send the new password data to the backend
+    // and return the response.
+    sendLogin(data, token) {
+        postData(mainurl + '/auth/password/', data, token)
+            .then(data => {
+                console.log(data)
+                this.setState({ data })
+                return data; // JSON data parsed by `response.json()` call
+            })
+            .then(console.log("le mot de passe est a jour"));
+    }
+    //Required method to render React elements 
     render() {
         return (
             <>
@@ -72,11 +81,11 @@ class PasswordChange extends React.Component {
 
                             <p>You can change your password here</p>
                             <input type="password" id="old_password" className="fadeIn second" onChange={this.myChangeHandler} name="password" placeholder="Old Password" required />
-                            <input type="password" id="new_password1" className="fadeIn third" onChange={this.myChangeHandler} name="password1" placeholder="New Oassword" required />
+                            <input type="password" id="new_password1" className="fadeIn third" onChange={this.myChangeHandler} name="password1" placeholder="New Password" required />
                             <input type="password" id="new_password2" className="fadeIn third" onChange={this.myChangeHandler} name="password2" placeholder="New Password" required />
                             {this.state.errormessage}
                             <input type="submit" className="fadeIn fourth" value="Submit" />
-                            
+
                         </form>
                         <div id="formFooter">
 

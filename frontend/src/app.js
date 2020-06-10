@@ -4,9 +4,12 @@ import Auth from './user_auth';
 import Map from './map';
 
 let mainurl
+let temptoken
 
 if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
+temptoken = null
 } else {mainurl =  'http://localhost:8000'
+temptoken = "Token 825e04c5a051b03a208ea6baec3b3478ad348067"
 }
 
 class App extends React.Component {
@@ -14,7 +17,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             is_logged: false,
-            token: null,
+            token: temptoken,
             mode: null,          
         };
         this.handler = this.handler.bind(this)
@@ -30,9 +33,9 @@ class App extends React.Component {
         return (
             <>
                 <NavBar is_logged={this.state.is_logged} handler={this.handler} />
-                <div id="containeres">
+                <div id="main-container">
                     <Map {...this.state} mainurl={mainurl}/>
-                    {this.state.mode !== null ? <Auth handler={this.handler} mode={this.state.mode} mainurl={mainurl} /> : null}
+                    {this.state.mode !== null ? <Auth handler={this.handler} {...this.state} /> : null}
                 </div>
             </>
         );

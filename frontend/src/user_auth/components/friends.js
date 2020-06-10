@@ -20,19 +20,24 @@ const BOOTSTRAP_CLASSES = {
 }
 
 class Friends extends React.Component {
+    /* this component manage the list of friends
+    part it display the current friends of the user 
+    among the list of all users in the system and can
+    update the user's friends list */
     constructor(props) {
         super(props);
         this.state = {
             selectedShips: []
         };
     }
-    //Get asynchronously the GeoJSON Object, immediately after a component is mounted
+    //Get asynchronously the data Object, immediately after a component is mounted
     componentDidMount() {
-        //Connect to the api backend to get the GeoJSON Object.
+        //Connect to the api backend to get the list of friends Object.
         getData(mainurl + '/user/friends_list', this.props.token)
             .then(data => {
                 this.setState({ selectedShips: data });
             })
+        //Connect to the api backend to get the list of users Object.
         getData(mainurl + '/user/users_list', this.props.token)
             .then(data => {
                 this.setState({ users: data });
@@ -56,7 +61,8 @@ class Friends extends React.Component {
         event.preventDefault();
         this.sendLogin(this.state, "")
     }
-
+    // send and AJAX POST request to update the 
+    // friends list pass as 'data'
     sendUpdate(data, token) {
         postData(mainurl + '/user/friends_list/', data, token)
             .then(data => {
@@ -67,7 +73,7 @@ class Friends extends React.Component {
             })
 
     }
-
+    //Required method to render React elements 
     render() {
         let friends 
         this.state.users ?  friends = this.state.users :  friends = []
