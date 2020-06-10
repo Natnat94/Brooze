@@ -32,39 +32,17 @@ class Home(generic.ListView):
         return data
 
 
-@api_view(["POST", "GET"])
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def api(request):
-    """ while accessed by a GET method, this function return the best
-    match of the closest shop according to the authenticated user's and
+    """ This function return the best match of the closest shop according to the authenticated user's and
     user's friends position.
-    if accessed through the POST method, it will update the new position
-    then act in the same way with the GET method.
-    The keys needed are: 'long', 'lat' """
-    if request.method == "POST":
-        user_location = User.objects.filter(
-            auth_token=request.auth
-        )  # Selectionne l'utilisateur
-        data = json.loads(request.body)  # charge le contenu JSON de POST
-        print(data)
-        pnt = Point(
-            data["long"], data["lat"]
-        )  # Créé un point géographique pour Django
-        pnt = GEOSGeometry(pnt)
-        user_location.update(
-            geom=pnt, last_name="mimoun"
-        )  # mets a jour sa position
-
-        best_match = Matchmaker().find_shop(id=1)
-        best_shop = Shops.objects.filter(pk=best_match)
-        response_data = serialize("geojson", best_shop)
-        return HttpResponse(response_data, content_type="json")
-
-    else:
-        best_match = Matchmaker().find_shop(id=int(1))
-        best_shop = Shops.objects.filter(pk=best_match)
-        response_data = serialize("geojson", best_shop)
-        return HttpResponse(response_data, content_type="json")
+    The keys needed are: '' """
+    user = User.objects.get(auth_token=request.auth)
+    best_match = Matchmaker().find_shop(id=user.id)
+    best_shop = Shops.objects.filter(pk=best_match)
+    response_data = serialize("geojson", best_shop)
+    return HttpResponse(response_data, content_type="json")
 
 
 @api_view()
