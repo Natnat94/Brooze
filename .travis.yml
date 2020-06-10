@@ -4,9 +4,9 @@ python:
  - '3.8'
 
 before_install:
-  - sudo add-apt-repository ppa:ubuntugis/ppa
+  - sudo add-apt-repository -y ppa:ubuntugis/ppa
   - sudo apt-get update
-  
+
 env : DJANGO_SETTINGS_MODULE="brooze.settings.travis"
 
 # branches:
@@ -17,12 +17,13 @@ services:
  - postgresql
 
 addons:
-  postgresql: '10'
   apt:
     packages:
-      - postgresql-10-postgis-2.4
-      - postgresql-10-postgis-2.4-scripts
-      - postgresql-client-10
+      - postgresql-11
+      - postgresql-11-postgis-2.5
+      - postgresql-11-postgis-2.5-scripts
+  postgresql: '11'
+
 before_script:
   - psql -U postgres -c "create extension postgis"
   - pipenv install
