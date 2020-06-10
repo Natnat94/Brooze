@@ -20,6 +20,9 @@ addons:
   postgresql: '10'
   apt:
     packages:
+      - gdal-bin libgdal-dev 
+      - python3-gdal
+      - binutils libproj-dev 
       - postgresql-10-postgis-2.4
       - postgresql-10-postgis-2.4-scripts
       - postgresql-client-10
