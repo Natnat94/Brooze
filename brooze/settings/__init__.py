@@ -40,7 +40,7 @@ SECRET_KEY = "6akl*%mxi$g6iijx8ioa+()+7edyg^_t*l4%@se11cd&9dfw_q"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.nathan-mimoun.live', 'nathan-mimoun.live','localhost',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -158,7 +158,6 @@ LEAFLET_CONFIG = {
     "MAX_ZOOM": 20,
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
@@ -166,13 +165,6 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOW_HEADERS = (
-#     'xsrfheadername',
-#     'xsrfcookiename',
-#     'content-type',
-#     'XSRF-TOKEN',
-#     'x-csrftoken',
-# )
 
 
 REST_FRAMEWORK = {
