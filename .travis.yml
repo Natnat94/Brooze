@@ -3,7 +3,10 @@ language: python
 python:
  - '3.8'
 
-
+before_install:
+  - sudo add-apt-repository ppa:ubuntugis/ppa
+  - sudo apt-get update
+  
 env : DJANGO_SETTINGS_MODULE="brooze.settings.travis"
 
 # branches:
