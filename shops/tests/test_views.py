@@ -2,6 +2,7 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
+from rest_framework.authtoken.models import Token
 
 from authentification.models import User
 from shops.models import Shops
@@ -60,9 +61,15 @@ class TestViews(APITestCase):
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_match(self):
-        user = User.objects.get(username="1@g.com")
+        self.client.post(
+            reverse("login"),
+            {"username": "1@g.com", "password": "1X<ISRUkw+tuK"},
+            format="json",
+        )
+        token = Token.objects.get(user__username="1@g.com")
+
         client = APIClient()
-        client.force_authenticate(user=user)
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
         resp = client.get(reverse("resultat"))
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -71,7 +78,7 @@ class TestViews(APITestCase):
     def test_get_shops_list_not_login(self):
         resp = self.client.get(reverse("all_shops"))
 
-        self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_get_shops_list(self):
         user = User.objects.get(username="1@g.com")

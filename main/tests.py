@@ -11,17 +11,25 @@ from authentification.models import User
 class MainViews(APITestCase):
     """ class that test the view of the 'main' app """
 
-    def setUp(self):
-        test_user1 = User.objects.create_user(
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = User.objects.create_user(
             username="rien@g.com", password="1X<ISRUkw+tuK"
         )
-        test_user1.save()
+        User.objects.create_user(
+            pk=2, username="3@g.com", password="1X<ISRUkw+tuK"
+        )
+        User.objects.create_user(
+            pk=3, username="2@g.com", password="1X<ISRUkw+tuK"
+        )
+
+    def setUp(self):
         url = reverse("login")
         data = {"username": "rien@g.com", "password": "1X<ISRUkw+tuK"}
         self.client.post(url, data, format="json")
 
     def test_user_detailed_profil(self):
-        token = Token.objects.get(user__username="rien@g.com")
+        token = Token.objects.get(user__username=MainViews.test_user)
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
@@ -31,7 +39,7 @@ class MainViews(APITestCase):
         self.assertIsNotNone(response.content)
 
     def test_user_updated_location(self):
-        token = Token.objects.get(user__username="rien@g.com")
+        token = Token.objects.get(user__username=MainViews.test_user)
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
@@ -43,3 +51,41 @@ class MainViews(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response_data, [42.0, 12.0])
+
+    def test_user_updated_friends(self):
+        token = Token.objects.get(user__username="rien@g.com")
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        rsp_old = client.get("/user/friends_list/")
+
+        data = [{"id": 2}, {"id": 3}]
+        response = client.post("/user/friends_list/", data, format="json")
+        rsp_new = client.get("/user/friends_list/")
+        data = json.loads(rsp_new.content)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(rsp_old.content, rsp_new.content)
+        self.assertIs(len(data), 2)
+
+    def test_users_list(self):
+        token = Token.objects.get(user__username="rien@g.com")
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+
+        response = client.get("/user/users_list/")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNotNone(response.content)
+
+    def test_users_friends_location(self):
+        token = Token.objects.get(user__username="rien@g.com")
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+
+        response = client.get("/user/friends_location/")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNotNone(response.content)
