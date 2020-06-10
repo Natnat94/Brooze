@@ -1,26 +1,17 @@
-from django.shortcuts import render, redirect
+
 from django.contrib import messages
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from django.core.serializers import serialize
-from .forms import UserRegisterForm, UserUpdateForm
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-
-
 from django.contrib.auth import authenticate
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.forms import PasswordChangeForm
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-)
 from rest_framework.response import Response
+from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED,
+                                   HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
+
 from authentification.models import User
+
+from .forms import UserRegisterForm, UserUpdateForm
 
 
 @api_view(["POST"])

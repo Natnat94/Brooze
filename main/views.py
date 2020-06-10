@@ -20,7 +20,18 @@ def user_detail(request):
     """ this function return the authenticated user's details in
     GEOJSON format"""
     user = User.objects.filter(auth_token=request.auth)
-    response_data = serialize("geojson", user, fields=('username', 'first_name', 'last_name', 'image', 'friends', 'geom'))
+    response_data = serialize(
+        "geojson",
+        user,
+        fields=(
+            "username",
+            "first_name",
+            "last_name",
+            "image",
+            "friends",
+            "geom",
+        ),
+    )
     return HttpResponse(response_data, content_type="json")
 
 
@@ -30,9 +41,10 @@ def update_user_location(request):
     """ this function update the authenticated user's position in the DB
     and return the updated profile.
     The keys needed are: 'long', 'lat' """
-    user = User.objects.filter(auth_token=request.auth)  # Selectionne l'utilisateur
+    user = User.objects.filter(
+        auth_token=request.auth
+    )  # Selectionne l'utilisateur
     data = json.loads(request.body)  # charge le contenu JSON de POST
-    print(data)
     pnt = Point(
         data["long"], data["lat"]
     )  # Créé un point géographique pour Django
@@ -66,13 +78,14 @@ def friends_list(request):
         user = User.objects.get(auth_token=request.auth)
         user.friends.clear()
         for i in request.data:
-            friend = User.objects.get(id=i['id'])
+            friend = User.objects.get(id=i["id"])
             user.friends.add(friend)
-        print(user.friends.all())
-        return JsonResponse({'message': 'friends list updated !'})
+        return JsonResponse({"message": "friends list updated !"})
     else:
         user = User.objects.get(auth_token=request.auth)
-        friends = user.friends.all().values('username','id').order_by('username')
+        friends = (
+            user.friends.all().values("username", "id").order_by("username")
+        )
         return JsonResponse(list(friends), safe=False)
 
 
@@ -82,6 +95,10 @@ def users_list(request):
     """ this function return the users list when the user is
     authenticated.
     The keys needed are:  """
-    
-    users = User.objects.all().values('username','id').exclude(auth_token=request.auth).order_by('username')
+    users = (
+        User.objects.all()
+        .values("username", "id")
+        .exclude(auth_token=request.auth)
+        .order_by("username")
+    )
     return JsonResponse(list(users), safe=False)

@@ -37,7 +37,7 @@ class Matchmaker:
         the shop with the higher score """
         current_user = User.objects.get(pk=id)
 
-        users = [id,]
+        users = [id, ]
         final_dict = {}
         temp_list = []
 
@@ -49,16 +49,16 @@ class Matchmaker:
             for i in user:
                 final_dict[i['id']] = 0
                 temp_list.append({i['id']: i['rank']})
-                
+
         for i in temp_list:
             for key, value in i.items():
                 final_dict[key] = final_dict[key] + value
-        # print(final_dict)
         x_key = max(final_dict, key=final_dict.get)
         return x_key
 
 
 match_maker = Matchmaker()
+
 
 class Frienddealer:
     pass

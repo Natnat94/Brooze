@@ -1,8 +1,8 @@
 from django.contrib.gis.geos import GEOSGeometry
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient, APITestCase
 from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient, APITestCase
 
 from authentification.models import User
 from shops.models import Shops
