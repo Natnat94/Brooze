@@ -35,6 +35,7 @@ def register(request):
         form.save()
         username = form.cleaned_data.get("username")
         user = User.objects.get(username=username)
+        user.friends.clear()
         messages.success(request, f"Le compte est créé pour {username}.")
         token, _ = Token.objects.get_or_create(user=user)
         return Response(
@@ -58,9 +59,7 @@ def login(request):
     user primay key, the username and the auth token.
     the keys needed are: 'username', 'password' """
     username = request.data.get("username")
-    print(username)
     password = request.data.get("password")
-    print(password)
     if username is None or password is None:
         return Response(
             {"error": "Please provide both username and password"},
