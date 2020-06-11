@@ -1,7 +1,7 @@
 from . import *
 import os
 
-DEBUG = True
+DEBUG = False
 
 DATABASES = {
     "default": {
@@ -12,5 +12,5 @@ DATABASES = {
     }
 }
 SECRET_KEY = os.environ.get("SECRET_KEY")
-
+CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = ["www.nathan-mimoun.live", "nathan-mimoun.live", "projet13.nathan-mimoun.live"]
