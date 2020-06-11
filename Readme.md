@@ -10,30 +10,32 @@ To run the application, it's recommended to setup a virtual environment with Pos
 - Clone the git repo
 - Install dependencies:
 
-    ``` pipenv install```
-
-    ``` cd frontend/```
-
-    ```npm install```
+    ``` 
+    pipenv install
+    cd frontend/
+    npm install
+    ```
 
 - Set the DB 'djangotest' with username 'postgres' & password 'nathan':
 - Populate the DB:
     
-    ```pipenv run manage.py migrate```
-
-    ```pipenv run manage.py shell```
-
-    ```from shops.load import run```
-
-    ```run()```
+    ```pipenv run manage.py migrate
+    pipenv run manage.py shell
+    from shops.load import run
+    run()```
     
 - Run the webservers:
 
-     ```pipenv run manage.py runserver```
+     ```
+     pipenv run manage.py runserver
+     ```
 
   in the folder 'frontend' run: 
 
-     ```npm run start```
+     ```
+     npm run start
+     ```
+     
 - Go to the address provided by the npm serve
       
 - Enjoy !
