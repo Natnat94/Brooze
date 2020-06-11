@@ -1,7 +1,7 @@
 from . import *
 import os
 
-DEBUG = True
+DEBUG = False
 
 DATABASES = {
     "default": {
