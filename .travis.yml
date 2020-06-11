@@ -10,9 +10,9 @@ before_install:
 
 env : DJANGO_SETTINGS_MODULE="brooze.settings.travis"
 
-branches:
- only:
-  - stage
+# branches:
+#  only:
+#   - stage
 
 services:
  - postgresql
