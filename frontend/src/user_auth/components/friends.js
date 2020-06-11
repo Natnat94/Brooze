@@ -5,12 +5,12 @@ import FilteredMultiSelect from 'react-filtered-multiselect'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 let mainurl
-
-if (process.env.NODE_ENV === 'production') {
-    mainurl = 'https://nathan-mimoun.live/api'
-} else {
-    mainurl = 'http://localhost:8000'
-}
+mainurl = 'https://nathan-mimoun.live/api'
+// if (process.env.NODE_ENV === 'production') {
+//     mainurl = 'https://nathan-mimoun.live/api'
+// } else {
+//     mainurl = 'http://localhost:8000'
+// }
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -33,12 +33,12 @@ class Friends extends React.Component {
     //Get asynchronously the data Object, immediately after a component is mounted
     componentDidMount() {
         //Connect to the api backend to get the list of friends Object.
-        getData(mainurl + '/user/friends_list', this.props.token)
+        getData(mainurl + '/user/friends_list/', this.props.token)
             .then(data => {
                 this.setState({ selectedShips: data });
             })
         //Connect to the api backend to get the list of users Object.
-        getData(mainurl + '/user/users_list', this.props.token)
+        getData(mainurl + '/user/users_list/', this.props.token)
             .then(data => {
                 this.setState({ users: data });
             })

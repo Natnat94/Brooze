@@ -5,12 +5,13 @@ import Map from './map';
 
 let mainurl
 let temptoken
-
-if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
+mainurl = 'https://nathan-mimoun.live/api'
 temptoken = null
-} else {mainurl =  'http://localhost:8000'
-temptoken = "Token 825e04c5a051b03a208ea6baec3b3478ad348067"
-}
+// if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
+// temptoken = null
+// } else {mainurl =  'http://localhost:8000'
+// temptoken = "Token 825e04c5a051b03a208ea6baec3b3478ad348067"
+// }
 
 class App extends React.Component {
     constructor(props) {

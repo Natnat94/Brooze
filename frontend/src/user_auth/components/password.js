@@ -4,12 +4,12 @@ import { postData } from '../../map/ApiDataFunc'
 
 
 let mainurl
-
-if (process.env.NODE_ENV === 'production') {
-    mainurl = 'https://nathan-mimoun.live/api'
-} else {
-    mainurl = 'http://localhost:8000'
-}
+mainurl = 'https://nathan-mimoun.live/api'
+// if (process.env.NODE_ENV === 'production') {
+//     mainurl = 'https://nathan-mimoun.live/api'
+// } else {
+//     mainurl = 'http://localhost:8000'
+// }
 
 
 
