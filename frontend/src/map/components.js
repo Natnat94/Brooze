@@ -45,7 +45,7 @@ export class UnlogMap extends React.Component {
       lng: 2.352222,
       zoom: 14,
       isLoading: true,
-      yes: false
+      action: false
     };
   }
 
@@ -104,6 +104,7 @@ export class UnlogMap extends React.Component {
     postData(mainurl + '/user/update/', position, token)
       .then(getData(mainurl + '/map/match/', this.props.token)
         .then(data => this.setState({ match: data })))
+        .then(this.setState({ action: true }))
       ;
   }
 
@@ -171,12 +172,12 @@ export class UnlogMap extends React.Component {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
-          <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />
+          {this.state.action === true ? '' : <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} /> }
           {this.state.friends ? <GeoJSON key={Math.random()} data={this.state.friends} onEachFeature={this.displayUserName} /> : ''}
           {button}
-          {button2}
+          {/* {button2} */}
           {this.state.user ? <Marker position={this.state.user} icon={customMarkerRed} /> : ''}
-          {this.state.match ? <GeoJSON key={Math.random()} data={this.state.match} pointToLayer={this.redPointer} onEachFeature={this.displayBarname} /> : ''}
+          {this.state.match ? <GeoJSON key={Math.random()} data={this.state.match} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} /> : ''}
           {/* {marker()} */}
           <LocateControl options={locateOptions} />
         </Map>
