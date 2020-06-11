@@ -22,7 +22,8 @@ To run the application, it's recommended to setup a virtual environment with Pos
     ```pipenv run manage.py migrate
     pipenv run manage.py shell
     from shops.load import run
-    run()```
+    run()
+    ```
     
 - Run the webservers:
 
@@ -35,7 +36,7 @@ To run the application, it's recommended to setup a virtual environment with Pos
      ```
      npm run start
      ```
-     
+
 - Go to the address provided by the npm serve
       
 - Enjoy !
