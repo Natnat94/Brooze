@@ -9,12 +9,12 @@ import { customMarkerYellow, customMarkerRed } from './customMarker';
 import './maprenderer.css';
 
 let mainurl
-mainurl = 'https://nathan-mimoun.live/api'
-// if (process.env.NODE_ENV === 'production') {
-//   mainurl = 'https://nathan-mimoun.live/api'
-// } else {
-//   mainurl = 'http://localhost:8000'
-// }
+
+if (process.env.NODE_ENV === 'production') {
+  mainurl = 'https://nathan-mimoun.live/api'
+} else {
+  mainurl = 'http://localhost:8000'
+}
 
 //https://techiediaries.com/react-ajax
 

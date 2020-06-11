@@ -5,12 +5,12 @@ import FilteredMultiSelect from 'react-filtered-multiselect'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 let mainurl
-mainurl = 'https://nathan-mimoun.live/api'
-// if (process.env.NODE_ENV === 'production') {
-//     mainurl = 'https://nathan-mimoun.live/api'
-// } else {
-//     mainurl = 'http://localhost:8000'
-// }
+
+if (process.env.NODE_ENV === 'production') {
+    mainurl = 'https://nathan-mimoun.live/api'
+} else {
+    mainurl = 'http://localhost:8000'
+}
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
