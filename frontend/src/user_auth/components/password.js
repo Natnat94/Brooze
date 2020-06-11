@@ -63,7 +63,8 @@ class PasswordChange extends React.Component {
         postData(mainurl + '/auth/password/', data, token)
             .then(data => {
                 console.log(data)
-                this.setState({ data })
+                this.props.handler('token', 'Token ' + data.token);
+                this.props.handler('mode', null);
                 return data; // JSON data parsed by `response.json()` call
             })
             .then(console.log("le mot de passe est a jour"));
