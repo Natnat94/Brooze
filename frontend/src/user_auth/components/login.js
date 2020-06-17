@@ -35,7 +35,7 @@ class LogIn extends React.Component {
 
     logError = (error) => {
         // Do stuff with the error
-        this.setState({errors: error})
+        this.setState({ errors: error })
         console.error('Error: \n' + error.error)
     }
 
@@ -49,11 +49,14 @@ class LogIn extends React.Component {
     }
     //Required method to render React elements 
     render() {
-        const renderLoginValidationError = this.state.errors ? <label htmlFor="" style={{ color: "red" }}>{ this.state.errors.error}</label> :  null;
+        const renderLoginValidationError = this.state.errors ? <label htmlFor="" style={{ color: "red" }}>{this.state.errors.error}</label> : null;
         return (
             <>
                 <div className="wrapper fadeInDown">
                     <div id="formContent">
+                        <div id='formHeader'>
+                            <span className="closebtn" onClick={() => this.props.handler('mode', null)}>&times;</span>
+                        </div>
                         <div className="fadeIn first">
                             <img src={require('./icon3.png')} id="icon" alt="User Icon" />
                         </div>

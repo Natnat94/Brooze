@@ -51,8 +51,8 @@ class SignUp extends React.Component {
     }
 
     findCoordinates() {
-    // this function determine the location of
-    // the user and set it to the state.
+        // this function determine the location of
+        // the user and set it to the state.
         navigator.geolocation.getCurrentPosition(
             position => {
                 this.setState({
@@ -78,7 +78,7 @@ class SignUp extends React.Component {
 
     logError = (error) => {
         // Do stuff with the error
-        this.setState({errors: error})
+        this.setState({ errors: error })
         let x
         for (x in error) {
             let i
@@ -90,8 +90,8 @@ class SignUp extends React.Component {
     }
 
     sendLogin(data, token) {
-    // this function send the login data to the backend
-    // and return the response.
+        // this function send the login data to the backend
+        // and return the response.
         postData(this.props.mainurl + '/auth/register/', data, token)
             .then(this.valideResponse)
             .catch(this.logError);
@@ -100,18 +100,21 @@ class SignUp extends React.Component {
 
     //Required method to render React elements 
     render() {
-        const ErrorValidationLabel = ({txtLbl}) => (
+        const ErrorValidationLabel = ({ txtLbl }) => (
             <label htmlFor="" style={{ color: "red" }}>
                 {txtLbl}
             </label>
         );
-        const renderPasswordValidationError = this.state.errors ?  (this.state.errors.password2 ? this.state.errors.password2.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) :  null) : null;
-        const renderUsernameValidationError = this.state.errors ?  (this.state.errors.username ? this.state.errors.username.map((d,index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) :  null) : null;
-        
+        const renderPasswordValidationError = this.state.errors ? (this.state.errors.password2 ? this.state.errors.password2.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) : null) : null;
+        const renderUsernameValidationError = this.state.errors ? (this.state.errors.username ? this.state.errors.username.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) : null) : null;
+
         return (
             <>
                 <div className="wrapper fadeInDown">
                     <div id="formContent">
+                        <div id='formHeader'>
+                            <span className="closebtn" onClick={() => this.props.handler('mode', null)}>&times;</span>
+                        </div>
                         <div className="fadeIn first">
                             <img src={require('./icon3.png')} id="icon" alt="User Icon" />
                         </div>

@@ -31,7 +31,7 @@ class PasswordChange extends React.Component {
         this.setState({ errormessage: err });
         this.setState({ [nam]: val });
     }
-    
+
     mySubmitHandler = (event) => {
         event.preventDefault();
         if (this.state.password1 !== this.state.password2) { }
@@ -53,7 +53,7 @@ class PasswordChange extends React.Component {
 
     logError = (error) => {
         // Do stuff with the error
-        this.setState({errors: error})
+        this.setState({ errors: error })
         let x
         for (x in error) {
             let i
@@ -68,17 +68,20 @@ class PasswordChange extends React.Component {
     // and return the response.
     sendLogin(data, token) {
         postData(this.props.mainurl + '/auth/password/', data, token)
-        .then(this.valideResponse)
-        .catch(this.logError);
+            .then(this.valideResponse)
+            .catch(this.logError);
     }
     //Required method to render React elements 
     render() {
-        const renderNewPasswordValidationError = this.state.errors ?  (this.state.errors.new_password2 ? this.state.errors.new_password2.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) :  null) : null;
-        const renderOldPasswordValidationError = this.state.errors ?  (this.state.errors.old_password ? this.state.errors.old_password.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) :  null) : null;
+        const renderNewPasswordValidationError = this.state.errors ? (this.state.errors.new_password2 ? this.state.errors.new_password2.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) : null) : null;
+        const renderOldPasswordValidationError = this.state.errors ? (this.state.errors.old_password ? this.state.errors.old_password.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) : null) : null;
         return (
             <>
                 <div className="wrapper fadeInDown">
                     <div id="formContent">
+                        <div id='formHeader'>
+                            <span className="closebtn" onClick={() => this.props.handler('mode', null)}>&times;</span>
+                        </div>
                         <div className="fadeIn first">
                             <img src={require('./icon3.png')} id="icon" alt="User Icon" />
                         </div>

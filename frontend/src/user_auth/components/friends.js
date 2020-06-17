@@ -83,6 +83,9 @@ class Friends extends React.Component {
             <>
                 <div className="wrapper fadeInDown">
                     <div id="formContent" style={{ maxWidth: '80%' }} className='container mb-5s'>
+                        <div id='formHeader'>
+                            <span className="closebtn" onClick={() => this.props.handler('mode', null)}>&times;</span>
+                        </div>
                         <div className="fadeIn first" style={{ margin: '5px', }}>
                             <h3>Select your friends here:</h3>
                         </div>
