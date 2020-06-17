@@ -49,6 +49,8 @@ class PasswordChange extends React.Component {
         // Do stuff with the JSON
         this.props.handler('token', 'Token ' + json.token);
         this.props.handler('mode', null);
+        this.props.handler('snackbar_text', json.message);
+        this.props.handler('snackbar', true);
     }
 
     logError = (error) => {

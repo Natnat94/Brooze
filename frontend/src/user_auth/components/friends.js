@@ -59,6 +59,8 @@ class Friends extends React.Component {
     valideResponse = (json) => {
         // Do stuff with the JSON
         console.log(json)
+        this.props.handler('snackbar_text', json.message)
+        this.props.handler('snackbar', true)
     }
 
     logError = (error) => {
