@@ -4,13 +4,7 @@ import FilteredMultiSelect from 'react-filtered-multiselect'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-let mainurl
 
-if (process.env.NODE_ENV === 'production') {
-    mainurl = 'https://nathan-mimoun.live/api'
-} else {
-    mainurl = 'http://localhost:8000'
-}
 
 const BOOTSTRAP_CLASSES = {
     filter: 'form-control',
@@ -30,18 +24,18 @@ class Friends extends React.Component {
             selectedShips: []
         };
     }
+
     //Get asynchronously the data Object, immediately after a component is mounted
     componentDidMount() {
         //Connect to the api backend to get the list of friends Object.
-        getData(mainurl + '/user/friends_list/', this.props.token)
-            .then(data => {
-                this.setState({ selectedShips: data });
-            })
+        getData(this.props.mainurl + '/user/friends_list/', this.props.token)
+            .then(data => this.setState({ selectedShips: data }))
+            .catch(error => console.error('Error: \n' + error.detail))
+
         //Connect to the api backend to get the list of users Object.
-        getData(mainurl + '/user/users_list/', this.props.token)
-            .then(data => {
-                this.setState({ users: data });
-            })
+        getData(this.props.mainurl + '/user/users_list/', this.props.token)
+            .then(data => this.setState({ users: data }))
+            .catch(error => console.error('Error: \n' + error.detail))
     }
     handleDeselect(index) {
         var selectedShips = this.state.selectedShips.slice()
@@ -61,27 +55,39 @@ class Friends extends React.Component {
         event.preventDefault();
         this.sendLogin(this.state, "")
     }
+
+    valideResponse = (json) => {
+        // Do stuff with the JSON
+        console.log(json)
+        this.props.handler('snackbar_text', json.message)
+        this.props.handler('snackbar', true)
+    }
+
+    logError = (error) => {
+        // Do stuff with the error
+        this.setState({ errors: error })
+        console.error('Error: \n' + error)
+    }
+
     // send and AJAX POST request to update the 
     // friends list pass as 'data'
     sendUpdate(data, token) {
-        postData(mainurl + '/user/friends_list/', data, token)
-            .then(data => {
-                console.log(data);
-            })
-            .catch(e => {
-                console.log(e)
-            })
-
+        postData(this.props.mainurl + '/user/friends_list/', data, token)
+            .then(this.valideResponse)
+            .catch(this.logError);
     }
     //Required method to render React elements 
     render() {
-        let friends 
-        this.state.users ?  friends = this.state.users :  friends = []
+        let friends
+        this.state.users ? friends = this.state.users : friends = []
         var { selectedShips } = this.state
         return (
             <>
                 <div className="wrapper fadeInDown">
                     <div id="formContent" style={{ maxWidth: '80%' }} className='container mb-5s'>
+                        <div id='formHeader'>
+                            <span className="closebtn" onClick={() => this.props.handler('mode', null)}>&times;</span>
+                        </div>
                         <div className="fadeIn first" style={{ margin: '5px', }}>
                             <h3>Select your friends here:</h3>
                         </div>

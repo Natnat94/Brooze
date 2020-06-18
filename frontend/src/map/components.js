@@ -8,13 +8,6 @@ import { customMarkerYellow, customMarkerRed } from './customMarker';
 
 import './maprenderer.css';
 
-let mainurl
-
-if (process.env.NODE_ENV === 'production') {
-  mainurl = 'https://nathan-mimoun.live/api'
-} else {
-  mainurl = 'http://localhost:8000'
-}
 
 //https://techiediaries.com/react-ajax
 
@@ -53,10 +46,9 @@ export class UnlogMap extends React.Component {
   //Get asynchronously the GeoJSON Object, immediately after a component is mounted
   componentDidMount() {
     //Connect to the api backend to get the GeoJSON Object.
-    getData(mainurl + '/map/all', this.props.token)
-      .then(data => {
-        this.setState({ barlist: data });
-      })
+    getData(this.props.mainurl + '/map/all', this.props.token)
+      .then(data => this.setState({ barlist: data }))
+      .catch(error => console.error('Error: \n' + error.detail))
   }
 
   componentDidUpdate(prevState) {
@@ -101,22 +93,22 @@ export class UnlogMap extends React.Component {
   // return the best match for the user is GEOJSON format
   // that is set to the state.
   findMatch(position, token) {
-    postData(mainurl + '/user/update/', position, token)
-      .then(getData(mainurl + '/map/match/', this.props.token)
-        .then(data => this.setState({ match: data })))
-        .then(this.setState({ action: true }))
-      ;
+    postData(this.props.mainurl + '/user/update/', position, token)
+      .then(
+        getData(this.props.mainurl + '/map/match/', this.props.token)
+          .then(data => this.setState({ match: data, action: true }))
+          .catch(error => console.error('Error: \n' + error.detail))
+      )
+      .catch(error => console.error('Error: \n' + error.detail));
   }
 
   // this fonction send a GET request and
   // return an array of user's friends data in GEOJSON format
   // that is set to the state.
   findFriends = () => {
-    getData(mainurl + '/user/friends_location/', this.props.token)
-      .then(data => {
-        this.setState({ friends: data })
-      }
-      )
+    getData(this.props.mainurl + '/user/friends_location/', this.props.token)
+      .then(data => this.setState({ friends: data }))
+      .catch(error => console.error('Error: \n' + error.detail))
   }
 
 
@@ -172,7 +164,7 @@ export class UnlogMap extends React.Component {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
-          {this.state.action === true ? '' : <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} /> }
+          {this.state.action === true ? '' : <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />}
           {this.state.friends ? <GeoJSON key={Math.random()} data={this.state.friends} onEachFeature={this.displayUserName} /> : ''}
           {button}
           {/* {button2} */}

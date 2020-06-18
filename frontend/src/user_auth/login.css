@@ -65,8 +65,27 @@ html {
     -webkit-border-radius: 0 0 10px 10px;
     border-radius: 0 0 10px 10px;
   }
+  #formHeader {
+    border-top: 1px solid #dce8f1;
+    padding-right: 10px;
+    text-align: right;
+    padding-top: 5px;
+    -webkit-border-radius: 0 0 10px 10px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .closebtn {
+    color: black;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
   
-  
+  .closebtn:hover {
+    color: grey;
+  }
   
   /* TABS */
   
@@ -267,3 +286,4 @@ html {
     color: #D8000C;
     background-color: #FFD2D2;}
   
+

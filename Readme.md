@@ -5,6 +5,7 @@ Proudly served at [Project13-website](https://project13.nathan-mimoun.live)
 ## Getting started
 
 To run the application, it's recommended to setup a virtual environment with PostGIS.
+See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setting-up)
 
 ### Run Brooze on localhost:
 - Clone the git repo
@@ -53,7 +54,11 @@ To run the application, it's recommended to setup a virtual environment with Pos
 
 ### Version 0.6:
 
-  - [ ] Better handling of error message from the API
-  - [ ] Expanding the size of the bar entries in the DB
+  - [x] Better handling of error message from the API
+  - [x] Expanding the size of the bar entries in the DB
   - [ ] Enhancing the popup content display
-  - [ ] Storing the session token in the cookies
+  - [x] Storing the session token in the ~~cookies~~ local storage
+  - [x] Add a logout function on the frontend side
+
+### Version 0.7:
+  - [ ] Add clustering on the map
