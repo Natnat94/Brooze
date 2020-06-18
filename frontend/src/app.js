@@ -7,7 +7,8 @@ import SnackBar from './notification_toast/snackbar';
 let mainurl
 let temptoken
 temptoken = null
-mainurl = 'https://nathan-mimoun.live/api'
+// mainurl = 'https://nathan-mimoun.live/api'
+mainurl =  'http://localhost:8000'
 // if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
 // temptoken = null
 // } else {mainurl =  'http://localhost:8000'
@@ -35,13 +36,18 @@ class App extends React.Component {
         })
   
     }
+    
 
-
-    render() {
+    render() { 
+        if (this.state.is_logged === false) { 
+            if (localStorage.getItem('token')) {
+                this.setState({token: 'Token ' + localStorage.getItem('token'), is_logged: true})
+            }
+        }
         return (
             <>
-                <SnackBar snackbar={this.state.snackbar} text={this.state.snackbar_text} />
-                <NavBar is_logged={this.state.is_logged} handler={this.handler} />
+                <SnackBar snackbar={this.state.snackbar} text={this.state.snackbar_text} handler={this.handler} />
+                <NavBar {...this.state} handler={this.handler} />
                 <div id="main-container">
                     <Map {...this.state} mainurl={mainurl} />
                     {this.state.mode !== null ? <Auth handler={this.handler} {...this.state} /> : null}
