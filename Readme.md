@@ -1,6 +1,6 @@
 # Project Brooze
 
-Proudly served at [Project13-website](https://project13.nathan-mimoun.live)
+Proudly served at [Project13-website](https://projet13.nathan-mimoun.live)
 
 ## Getting started
 
