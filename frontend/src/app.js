@@ -7,8 +7,8 @@ import SnackBar from './notification_toast/snackbar';
 let mainurl
 let temptoken
 temptoken = null
-// mainurl = 'https://nathan-mimoun.live/api'
-mainurl =  'http://localhost:8000'
+mainurl = 'https://nathan-mimoun.live/api'
+// mainurl =  'http://localhost:8000'
 // if (process.env.NODE_ENV === 'production') {mainurl =  'https://nathan-mimoun.live/api'
 // temptoken = null
 // } else {mainurl =  'http://localhost:8000'
