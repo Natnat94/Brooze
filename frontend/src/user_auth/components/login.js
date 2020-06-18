@@ -30,9 +30,10 @@ class LogIn extends React.Component {
         // Do stuff with the JSON
         this.props.handler('is_logged', true);
         this.props.handler('token', 'Token ' + json.token);
+        localStorage.setItem("token", json.token)
         this.props.handler('mode', null);
         this.props.handler('snackbar_text', json.message);
-        this.props.handler('snackbar', true);
+        // this.props.handler('snackbar', true);
     }
 
     logError = (error) => {

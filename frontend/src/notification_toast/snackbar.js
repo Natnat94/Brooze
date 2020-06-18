@@ -4,7 +4,7 @@ import './snackbar.css';
 
 
 class SnackBar extends React.Component {
-    myFunction() {
+    myFunction = () => {
         // Get the snackbar DIV
         var x = document.getElementById("snackbar");
 
@@ -13,7 +13,7 @@ class SnackBar extends React.Component {
 
         // After 3 seconds, remove the show class from DIV
         setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-        // this.props.handler('snackbar', false)
+        this.props.handler('snackbar', false)
     }
 
     render() {if (this.props.snackbar) {

@@ -48,6 +48,7 @@ class PasswordChange extends React.Component {
     valideResponse = (json) => {
         // Do stuff with the JSON
         this.props.handler('token', 'Token ' + json.token);
+        localStorage.setItem("token", json.token)
         this.props.handler('mode', null);
         this.props.handler('snackbar_text', json.message);
         this.props.handler('snackbar', true);

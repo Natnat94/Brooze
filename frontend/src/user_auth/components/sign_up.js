@@ -73,9 +73,10 @@ class SignUp extends React.Component {
         // Do stuff with the JSON
         this.props.handler('is_logged', true);
         this.props.handler('token', 'Token ' + json.token);
+        localStorage.setItem("token", json.token)
         this.props.handler('mode', null);
         this.props.handler('snackbar_text', json.message);
-        this.props.handler('snackbar', true);
+        // this.props.handler('snackbar', true);
     }
 
     logError = (error) => {
@@ -102,11 +103,11 @@ class SignUp extends React.Component {
 
     //Required method to render React elements 
     render() {
-        const ErrorValidationLabel = ({ txtLbl }) => (
-            <label htmlFor="" style={{ color: "red" }}>
-                {txtLbl}
-            </label>
-        );
+        // const ErrorValidationLabel = ({ txtLbl }) => (
+        //     <label htmlFor="" style={{ color: "red" }}>
+        //         {txtLbl}
+        //     </label>
+        // );
         const renderPasswordValidationError = this.state.errors ? (this.state.errors.password2 ? this.state.errors.password2.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) : null) : null;
         const renderUsernameValidationError = this.state.errors ? (this.state.errors.username ? this.state.errors.username.map((d, index) => <label key={index} htmlFor="" style={{ color: "red" }}>{d.message}</label>) : null) : null;
 
