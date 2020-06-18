@@ -55,9 +55,10 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
 ### Version 0.6:
 
   - [x] Better handling of error message from the API
-  - [ ] Expanding the size of the bar entries in the DB
+  - [x] Expanding the size of the bar entries in the DB
   - [ ] Enhancing the popup content display
-  - [ ] Storing the session token in the cookies
+  - [x] Storing the session token in the ~~cookies~~ local storage
+  - [x] Add a logout function on the frontend side
 
 ### Version 0.7:
   - [ ] Add clustering on the map
