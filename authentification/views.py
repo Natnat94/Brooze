@@ -1,13 +1,17 @@
-
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.gis.geos import GEOSGeometry, Point
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED,
-                                   HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+)
 
 from authentification.models import User
 
@@ -23,8 +27,16 @@ def register(request):
     where 'username' is valid email format"""
     form = UserRegisterForm(request.data)
     if form.is_valid():
+        position = request.data["position"]
         form.save()
         username = form.cleaned_data.get("username")
+        user = User.objects.filter(username=username)
+        # update the position
+        pnt = Point(
+            position["long"], position["lat"]
+        )  # create a geopoint for Django
+        pnt = GEOSGeometry(pnt)
+        user.update(geom=pnt)
         user = User.objects.get(username=username)
         user.friends.clear()
         messages.success(request, f"Le compte est créé pour {username}.")

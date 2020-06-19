@@ -37,11 +37,14 @@ class TestViews(APITestCase):
             "username": "rie47n@g.com",
             "password1": "1X<ISRUkw+tuK",
             "password2": "1X<ISRUkw+tuK",
+            "position": {"long": 48.864, "lat": 2.349},
         }
         response = self.client.post(url, data, format="json")
+        user = User.objects.get(username="rie47n@g.com")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(response.data["token"])
+        self.assertEqual(user.geom.coords, (48.864, 2.349))
 
     def test_change_password_failed(self):
         user = User.objects.get(username="rien@g.com")
