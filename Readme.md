@@ -61,4 +61,4 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
   - [x] Add a logout function on the frontend side
 
 ### Version 0.7:
-  - [ ] Add clustering on the map
+  - [x] Add clustering on the map
