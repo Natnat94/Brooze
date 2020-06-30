@@ -9,6 +9,7 @@
     "bootstrap": "^4.5.0",
     "leaflet": "^1.6.0",
     "leaflet.locatecontrol": "^0.72.0",
+    "leaflet.markercluster": "^1.4.1",
     "react": "^16.13.1",
     "react-burger-menu": "^2.6.13",
     "react-dom": "^16.13.1",
@@ -16,6 +17,7 @@
     "react-leaflet": "^2.6.3",
     "react-leaflet-control": "^2.1.2",
     "react-leaflet-locate-control": "^0.1.6",
+    "react-leaflet-markercluster": "^2.0.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {

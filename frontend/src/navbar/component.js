@@ -39,6 +39,7 @@ export class NavBar extends React.Component {
 
   logout = (event) => {
     event.preventDefault();
+    // eslint-disable-next-line
     let token = localStorage.getItem('token')
     console.log(this.props.token)
     postData(this.props.mainurl + '/auth/logout/', '', this.props.token)

@@ -5,6 +5,7 @@ import Control from 'react-leaflet-control';
 import LocateControl from './location_control/LocateControl';
 import { postData, getData } from './ApiDataFunc';
 import { customMarkerYellow, customMarkerRed } from './customMarker';
+import MarkerClusterGroup from "react-leaflet-markercluster";
 
 import './maprenderer.css';
 
@@ -138,6 +139,7 @@ export class UnlogMap extends React.Component {
 
   //Required method to render React elements 
   render() {
+    require('react-leaflet-markercluster/dist/styles.min.css'); 
     const position = [48.8597, 2.349];
     let button;
     if (this.props.is_logged) {
@@ -149,7 +151,7 @@ export class UnlogMap extends React.Component {
         </button>
       </Control>;
     }
-
+// eslint-disable-next-line
     let button2;
     if (this.state.isLoggedIn) {
       button2 = <LogoutButton onClick={this.handleLogoutClick} />;
@@ -164,7 +166,9 @@ export class UnlogMap extends React.Component {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
+          <MarkerClusterGroup disableClusteringAtZoom = {15}>
           {this.state.action === true ? '' : <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />}
+          </MarkerClusterGroup>
           {this.state.friends ? <GeoJSON key={Math.random()} data={this.state.friends} onEachFeature={this.displayUserName} /> : ''}
           {button}
           {/* {button2} */}
