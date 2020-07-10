@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import React from 'react';
-import { GeoJSON, Map, TileLayer, Marker } from 'react-leaflet'; //Import React-Leaflet, who provides an abstraction of Leaflet as React components.
+import { GeoJSON, Map, TileLayer, Marker, Popup} from 'react-leaflet'; //Import React-Leaflet, who provides an abstraction of Leaflet as React components.
 import Control from 'react-leaflet-control';
 import LocateControl from './location_control/LocateControl';
 import { postData, getData } from './ApiDataFunc';
@@ -80,13 +80,16 @@ export class UnlogMap extends React.Component {
   // display the name of the bar above the marker
   // when cliqued on.
   displayBarname = (feature, layer) => {
-    layer.bindPopup("<h2>" + feature.properties.name + "</h2>");
+    layer.bindPopup(
+      "<h4>" + feature.properties.name + "</h4>"
+      + "Address: " + feature.properties.addrhousenumber + ' ' + feature.properties.addrstreet + ', ' + feature.properties.addrpostcode
+      );
   }
 
   // display the name of the user above the marker
   // when cliqued on.
   displayUserName = (feature, layer) => {
-    layer.bindPopup("<h2>" + feature.properties.username + "</h2>");
+    layer.bindPopup("<h4>" + feature.properties.username + "</h4>");
   }
 
   // this fonction send a GET request after updating
@@ -139,7 +142,7 @@ export class UnlogMap extends React.Component {
 
   //Required method to render React elements 
   render() {
-    require('react-leaflet-markercluster/dist/styles.min.css'); 
+    require('react-leaflet-markercluster/dist/styles.min.css');
     const position = [48.8597, 2.349];
     let button;
     if (this.props.is_logged) {
@@ -151,7 +154,7 @@ export class UnlogMap extends React.Component {
         </button>
       </Control>;
     }
-// eslint-disable-next-line
+    // eslint-disable-next-line
     let button2;
     if (this.state.isLoggedIn) {
       button2 = <LogoutButton onClick={this.handleLogoutClick} />;
@@ -166,13 +169,17 @@ export class UnlogMap extends React.Component {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
-          <MarkerClusterGroup disableClusteringAtZoom = {15}>
-          {this.state.action === true ? '' : <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />}
+          <MarkerClusterGroup disableClusteringAtZoom={15} spiderfyOnMaxZoom={false}>
+            {this.state.action === true ? '' : <GeoJSON key={Math.random()} data={this.state.barlist} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} />}
           </MarkerClusterGroup>
           {this.state.friends ? <GeoJSON key={Math.random()} data={this.state.friends} onEachFeature={this.displayUserName} /> : ''}
           {button}
           {/* {button2} */}
-          {this.state.user ? <Marker position={this.state.user} icon={customMarkerRed} /> : ''}
+          {this.state.user ? <Marker position={this.state.user} icon={customMarkerRed}>
+            <Popup>
+              <h4> Me! </h4>
+            </Popup> 
+          </Marker> : ''}
           {this.state.match ? <GeoJSON key={Math.random()} data={this.state.match} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} /> : ''}
           {/* {marker()} */}
           <LocateControl options={locateOptions} />
