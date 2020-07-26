@@ -80,9 +80,9 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
 
 ### Version 0.7: (mainly backend improvement)
   - [x] Add clustering on the map
-  - [ ] Confirmation email
+  - [x] Confirmation email
   - [ ] Enhancing the token use with an additional short term token
-  - [ ] Adding a phone number into the user profile
+  - [x] Adding a phone number into the user profile
   - [ ] Fixing the sketchy bars data 
 
 ### Version 0.8: (mainly frontend improvement)
@@ -90,3 +90,4 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
   - [ ] Adding tests for the frontend
   - [ ] Switching from standard markers to customized markers
   - [ ] Switching to a footer nav bar for mobile screen
+  - [ ] Adding a welcome screen
