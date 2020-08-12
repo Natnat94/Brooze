@@ -1,4 +1,4 @@
-# Project Brooze
+# Brooze (Project 13)
 
 [![Build Status](https://travis-ci.org/Natnat94/project_13.svg?branch=master)](https://travis-ci.org/Natnat94/project_13)
 
