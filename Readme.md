@@ -89,5 +89,6 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
 
   - [ ] Adding tests for the frontend
   - [ ] Switching from standard markers to customized markers
-  - [ ] Switching to a footer nav bar for mobile screen
+  - [x] Switching to a footer nav bar for mobile screen (temporarily default)
   - [ ] Adding a welcome screen
+  - [x] Profile details added
