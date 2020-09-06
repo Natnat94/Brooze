@@ -52,13 +52,6 @@ export class UnlogMap extends React.Component {
       .catch(error => console.error('Error: \n' + error.detail))
   }
 
-  componentDidUpdate(prevState) {
-    // Typical usage (don't forget to compare props):
-    if (this.state.user !== prevState.user) {
-      console.log('yes !')
-    }
-  }
-
   handleLoginClick() {
     this.setState({ isLoggedIn: true });
   }
@@ -149,8 +142,8 @@ export class UnlogMap extends React.Component {
       button = <Control position="bottomright" >
         <button onClick={
           this.findCoordinates
-        }>
-          <i className="fa fa-smile-o fa-2x"></i>
+        } id="thebutton">
+          <i className="buttontest"></i>
         </button>
       </Control>;
     }
