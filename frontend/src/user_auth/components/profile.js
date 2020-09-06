@@ -2,7 +2,6 @@ import React from 'react';
 import { postData, getData } from '../../map/ApiDataFunc'
 
 var style = {
-    backgroundColor: 'aqua',
     padding: '0px'
 }
 var borderstyle = {
