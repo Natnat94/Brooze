@@ -16,7 +16,7 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("username", "first_name", "last_name", "image")
+        fields = ("username", "first_name", "last_name", "gender", "phone")
         labels = {
             "first_name": _("Prénom"),
             "last_name": _("Nom de famille"),

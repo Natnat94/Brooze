@@ -6,7 +6,21 @@
 
 #map
   {
-    padding: 5px;
     position: absolute;
     width: 100%;
   }
+
+.buttontest {
+  background: url(beer.ico) no-repeat;
+  float: left;
+  width: 30px;
+  height: 30px;
+  background-position-x: 2px
+}
+#thebutton {
+  background-color: lightslategray;
+  padding: 0px;
+  border-radius: 50%;
+  width: 36px;
+  height: 38px;
+}

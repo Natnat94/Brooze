@@ -1,6 +1,6 @@
 # Brooze (Project 13)
 
-[![Build Status](https://travis-ci.org/Natnat94/project_13.svg?branch=master)](https://travis-ci.org/Natnat94/project_13)
+[![Build Status](https://travis-ci.org/Natnat94/Brooze.svg?branch=master)](https://travis-ci.org/Natnat94/project_13)
 
 Proudly served at [Project13-website](https://projet13.nathan-mimoun.live)
 
@@ -80,13 +80,15 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
 
 ### Version 0.7: (mainly backend improvement)
   - [x] Add clustering on the map
-  - [ ] Confirmation email
+  - [x] Confirmation email
   - [ ] Enhancing the token use with an additional short term token
-  - [ ] Adding a phone number into the user profile
+  - [x] Adding a phone number into the user profile
   - [ ] Fixing the sketchy bars data 
 
 ### Version 0.8: (mainly frontend improvement)
 
   - [ ] Adding tests for the frontend
   - [ ] Switching from standard markers to customized markers
-  - [ ] Switching to a footer nav bar for mobile screen
+  - [x] Switching to a footer nav bar for mobile screen (temporarily default)
+  - [ ] Adding a welcome screen
+  - [x] Profile details added

@@ -2,6 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.gis.geos import GEOSGeometry, Point
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -16,6 +19,8 @@ from rest_framework.status import (
 from authentification.models import User
 
 from .forms import UserRegisterForm, UserUpdateForm
+
+EMAIL_FROM = "misterx41@hotmail.com"
 
 
 @api_view(["POST"])
@@ -128,7 +133,7 @@ def profil(request):
     """ The POST method update the profil of the authenticated
     user and return it.
     The key needed is: 'username'. (disabled)
-    The optional keys are: 'first_name', 'last_name', 'image'(file !).
+    The optional keys are: 'first_name', 'last_name', 'gender', 'phone', 'image'(file !).
     The GET method return the authenticated user's profil """
     user = request.user
     if request.method == "POST":
@@ -158,5 +163,66 @@ def profil(request):
             "last_name": user.last_name,
             "image": user.image.url,
             "friends": friends,
+            "gender": user.gender,
+            "phone": user.phone,
         }
         return Response(data, status=HTTP_200_OK)
+
+
+@api_view()
+@permission_classes((AllowAny,))
+def confirmation_email(request, token=None):
+    """ this function send a confirmation email
+    to the user or confirm the user account.
+    the keys needed are: '' """  # need improvement
+    from django.http import HttpResponse
+    from django.core.exceptions import ObjectDoesNotExist
+
+    class AccountAlreadyConfirmed(Exception):
+        pass
+
+    if token is not None:
+        try:
+            user = Token.objects.get(key=token).user
+            if user.is_confirmed is True:
+                raise AccountAlreadyConfirmed
+            user.is_confirmed = True
+            user.save()
+            print(user)
+        except ObjectDoesNotExist:
+            print("Invalid Token")
+        except AccountAlreadyConfirmed:
+            print("Account already confirmed")
+    else:
+
+        try:
+            user = Token.objects.get(key=request.auth).user
+            if user.is_confirmed is True:
+                raise AccountAlreadyConfirmed
+
+            context = {
+                "username": request.user.username,
+                "url": "http://127.0.0.1:8000/auth/confirm/"
+                + str(request.auth)
+                + "/",
+            }
+            html_message = render_to_string(
+                "authentification/confirmation_email.html", context
+            )
+            plain_message = strip_tags(html_message)
+            send_mail(
+                "This is an account confirmation email",
+                plain_message,
+                EMAIL_FROM,
+                [request.user.username],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            print(user)
+
+        except ObjectDoesNotExist:
+            print("Invalid Token")
+
+        except AccountAlreadyConfirmed:
+            print("Account already confirmed")
+    return HttpResponse(status=HTTP_200_OK)
