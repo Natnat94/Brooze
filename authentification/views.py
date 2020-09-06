@@ -133,7 +133,7 @@ def profil(request):
     """ The POST method update the profil of the authenticated
     user and return it.
     The key needed is: 'username'. (disabled)
-    The optional keys are: 'first_name', 'last_name', 'image'(file !).
+    The optional keys are: 'first_name', 'last_name', 'gender', 'phone', 'image'(file !).
     The GET method return the authenticated user's profil """
     user = request.user
     if request.method == "POST":
@@ -163,6 +163,8 @@ def profil(request):
             "last_name": user.last_name,
             "image": user.image.url,
             "friends": friends,
+            "gender": user.gender,
+            "phone": user.phone,
         }
         return Response(data, status=HTTP_200_OK)
 

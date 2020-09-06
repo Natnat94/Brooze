@@ -12,8 +12,8 @@ class rien(admin.OSMGeoAdmin):
     # modifiable = False
     list_display = ("username", "is_staff", "is_active")
     fields = [
-        "username",
-        ("first_name", "last_name", "email"),
+        ("username", "gender"),
+        ("first_name", "last_name", "phone"),
         ("geom", "friends"),
     ]
 
