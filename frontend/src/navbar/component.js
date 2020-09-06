@@ -4,7 +4,6 @@ import './navbar.css'
 import { bubble as Menu } from 'react-burger-menu'
 import { postData } from '../map/ApiDataFunc'
 
-
 export class NavBar extends React.Component {
   /* this component manage the navigation bar 
   that is updated according to the 'is_logged' props
@@ -41,7 +40,6 @@ export class NavBar extends React.Component {
     event.preventDefault();
     // eslint-disable-next-line
     let token = localStorage.getItem('token')
-    console.log(this.props.token)
     postData(this.props.mainurl + '/auth/logout/', '', this.props.token)
       .then(this.valideResponse)
       .catch(this.logError)
@@ -51,6 +49,7 @@ export class NavBar extends React.Component {
   render() {
     // NOTE: You also need to provide styles, see https://github.com/negomi/react-burger-menu#styling
     return (
+
       <Menu>
         {this.props.is_logged ?
           (<>
@@ -70,3 +69,6 @@ export class NavBar extends React.Component {
     );
   }
 }
+
+
+
