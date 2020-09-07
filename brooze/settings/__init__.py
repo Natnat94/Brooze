@@ -176,6 +176,11 @@ REST_FRAMEWORK = {
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+if 'EMAIL_PWD' in os.environ:
+    EMAIL_HOST_PASSWORD = os.environ["EMAIL_PWD"]
+    print('EMAIL_HOST_PASSWORD environment variable is already defined. Value =', os.environ['EMAIL_PWD'])
+else:
+    EMAIL_HOST_PASSWORD = "123456789"
+    print('EMAIL_HOST_PASSWORD environment variable is not defined. Default Value =', EMAIL_HOST_PASSWORD)
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
