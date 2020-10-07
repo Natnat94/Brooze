@@ -10,6 +10,8 @@ import LaunchIcon from '@material-ui/icons/Launch';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import { postData } from '../map/ApiDataFunc'
 
+import './navbar.css'
+
 const useStyles = makeStyles({
     root: {
         width: '100%',
@@ -58,9 +60,9 @@ export const LabelBottomNavigation = (props) => {
         return (
             <BottomNavigation value={value} onChange={handleChange} className={classes.root} showLabels>
                 <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
-                <BottomNavigationAction label="LogOut" value="logout" onClick={() => { logout(props) }} icon={<LaunchIcon />} />
                 <BottomNavigationAction label="Profile" value="profile" icon={<AccountBoxIcon />} />
                 <BottomNavigationAction label="Friends" value="friends" icon={<PeopleAltIcon />} />
+                <BottomNavigationAction label="LogOut" value="logout" onClick={() => { logout(props) }} icon={<LaunchIcon />} />
             </BottomNavigation>
         );
 
