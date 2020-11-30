@@ -60,7 +60,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_gis",
     "rest_framework.authtoken",
+    'django_nose',
 ]
+
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # new
@@ -75,6 +78,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "brooze.urls"
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 TEMPLATES = [
     {
@@ -159,11 +165,19 @@ LEAFLET_CONFIG = {
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://192.168.1.41:3000",
 )
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ["www.nathan-mimoun.live", "nathan-mimoun.live", "projet13.nathan-mimoun.live","localhost","127.0.0.1"]
+ALLOWED_HOSTS = [
+    "www.nathan-mimoun.live",
+    "nathan-mimoun.live",
+    "projet13.nathan-mimoun.live",
+    "localhost",
+    "127.0.0.1",
+    "192.168.1.41",
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -174,13 +188,27 @@ REST_FRAMEWORK = {
     ),
 }
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-if 'EMAIL_PWD' in os.environ:
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST_USER = "apikey"  # this is exactly the value 'apikey'
+if "EMAIL_PWD" in os.environ:
     EMAIL_HOST_PASSWORD = os.environ["EMAIL_PWD"]
-    print('EMAIL_HOST_PASSWORD environment variable is already defined. Value =', os.environ['EMAIL_PWD'])
+    print(
+        "EMAIL_HOST_PASSWORD environment variable is already defined. Value =",
+        os.environ["EMAIL_PWD"],
+    )
 else:
     EMAIL_HOST_PASSWORD = "123456789"
-    print('EMAIL_HOST_PASSWORD environment variable is not defined. Default Value =', EMAIL_HOST_PASSWORD)
+    print(
+        "EMAIL_HOST_PASSWORD environment variable is not defined. Default Value =",
+        EMAIL_HOST_PASSWORD,
+    )
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+# Tell nose to measure coverage on the 'authentification' , 'main' and 'shops' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=authentification, main, shops',
+    '--cover-html',
+]
