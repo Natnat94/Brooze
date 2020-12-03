@@ -10,7 +10,7 @@ class rien(admin.OSMGeoAdmin):
     default_lat = 6250868.90147960
     default_lon = 255422.57162517
     # modifiable = False
-    list_display = ("username", "is_staff", "is_active")
+    list_display = ("username", "is_staff", "is_confirmed")
     fields = [
         ("username", "gender"),
         ("first_name", "last_name", "phone"),

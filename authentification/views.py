@@ -15,12 +15,18 @@ from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
 )
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 from authentification.models import User
 
 from .forms import UserRegisterForm, UserUpdateForm
 
 EMAIL_FROM = "misterx41@hotmail.com"
+
+#####################################
+#       User registration path      #
+#####################################
 
 
 @api_view(["POST"])
@@ -45,11 +51,14 @@ def register(request):
         user = User.objects.get(username=username)
         user.friends.clear()
         messages.success(request, f"Le compte est créé pour {username}.")
+        refresh = RefreshToken.for_user(user)
         token, _ = Token.objects.get_or_create(user=user)
         return Response(
             {
                 "message": f"l'utilisateur est créé pour {username}",
                 "token": token.key,
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
             },
             status=HTTP_201_CREATED,
         )
@@ -58,6 +67,83 @@ def register(request):
             form.errors.get_json_data(escape_html=False),
             status=HTTP_400_BAD_REQUEST,
         )
+
+
+@api_view()
+@permission_classes((AllowAny,))
+def confirmation_email(request, token=None):
+    """ this function send a confirmation email
+    to the user or confirm the user account.
+    the keys needed are: '' """  # need improvement
+    from django.http import HttpResponse
+    from django.core.exceptions import ObjectDoesNotExist
+
+    # print(os.environ["DJANGO_SETTINGS_MODULE"])
+
+    host_url = request.build_absolute_uri()
+    extra_url = host_url.index("auth")
+    host_url = host_url[
+        :extra_url
+    ]  # pour le moment pas utiliser voir plus bas
+
+    class AccountAlreadyConfirmed(Exception):
+        pass
+
+    if token is not None:
+        try:
+            user = Token.objects.get(key=token).user
+            if user.is_confirmed is True:
+                raise AccountAlreadyConfirmed
+            user.is_confirmed = True
+            user.save()
+            print(user)
+        except ObjectDoesNotExist:
+            print("Invalid Token")
+        except AccountAlreadyConfirmed:
+            print("Account already confirmed")
+    else:
+        host_url = request.get_host()
+        try:
+            user = Token.objects.get(key=request.auth).user
+            if user.is_confirmed is True:
+                raise AccountAlreadyConfirmed
+
+            context = {
+                "username": request.user.username,
+                "url": "http://"
+                + host_url
+                + "/auth/confirm/"
+                + str(request.auth)
+                + "/",
+            }
+            html_message = render_to_string(
+                "authentification/confirmation_email.html", context
+            )
+            plain_message = strip_tags(html_message)
+            send_mail(
+                "This is an account confirmation email",
+                plain_message,
+                EMAIL_FROM,
+                [request.user.username],
+                html_message=html_message,
+                fail_silently=False,
+            )
+        except ObjectDoesNotExist:
+            print("Invalid Token")
+
+        except AccountAlreadyConfirmed:
+            print("Account already confirmed")
+            return Response(
+                {"message": "Account already confirmed",},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+    return HttpResponse(status=HTTP_200_OK)
+
+
+#############################
+#       User auth. path     #
+#############################
 
 
 @api_view(["POST"])
@@ -78,10 +164,15 @@ def login(request):
         return Response(
             {"error": "Invalid Credentials"}, status=HTTP_404_NOT_FOUND
         )
-    token, _ = Token.objects.get_or_create(user=user)
+    refresh = RefreshToken.for_user(user)
     user = User.objects.get(username=username)
     return Response(
-        {"user_id": user.pk, "username": username, "token": token.key},
+        {
+            "user_id": user.pk,
+            "username": username,
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        },
         status=HTTP_200_OK,
     )
 
@@ -99,6 +190,54 @@ def logout(request):
     return Response(
         {"message": f"{username} is logged out"}, status=HTTP_200_OK
     )
+
+
+#######################################
+#       User profil modif. path       #
+#######################################
+
+
+@api_view(["POST", "GET"])
+@permission_classes((IsAuthenticated,))
+def profil(request):
+    """ The POST method update the profil of the authenticated
+    user and return it.
+    The key needed is: 'username'. (disabled)
+    The optional keys are: 'first_name', 'last_name', 'gender', 'phone', 'image'(file !).
+    The GET method return the authenticated user's profil """
+    user = request.user
+    if request.method == "POST":
+        form = UserUpdateForm(request.data, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            data = {
+                "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                # "image": user.image.url,
+                "phone": user.phone,
+            }
+            return Response(data, status=HTTP_200_OK)
+        else:
+            return Response(
+                form.errors.get_json_data(escape_html=False),
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+    else:
+        friends = []
+        for i in user.friends.all():
+            friends.append(i.username)
+        data = {
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            # "image": user.image.url,
+            "friends": friends,
+            "gender": user.gender,
+            "phone": user.phone,
+        }
+        return Response(data, status=HTTP_200_OK)
 
 
 @api_view(["POST"])
@@ -126,103 +265,3 @@ def change_password(request):
             status=HTTP_400_BAD_REQUEST,
         )
 
-
-@api_view(["POST", "GET"])
-@permission_classes((IsAuthenticated,))
-def profil(request):
-    """ The POST method update the profil of the authenticated
-    user and return it.
-    The key needed is: 'username'. (disabled)
-    The optional keys are: 'first_name', 'last_name', 'gender', 'phone', 'image'(file !).
-    The GET method return the authenticated user's profil """
-    user = request.user
-    if request.method == "POST":
-        form = UserUpdateForm(request.data, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            data = {
-                "username": user.username,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "image": user.image.url,
-            }
-            return Response(data, status=HTTP_200_OK)
-        else:
-            return Response(
-                form.errors.get_json_data(escape_html=False),
-                status=HTTP_400_BAD_REQUEST,
-            )
-
-    else:
-        friends = []
-        for i in user.friends.all():
-            friends.append(i.username)
-        data = {
-            "username": user.username,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "image": user.image.url,
-            "friends": friends,
-            "gender": user.gender,
-            "phone": user.phone,
-        }
-        return Response(data, status=HTTP_200_OK)
-
-
-@api_view()
-@permission_classes((AllowAny,))
-def confirmation_email(request, token=None):
-    """ this function send a confirmation email
-    to the user or confirm the user account.
-    the keys needed are: '' """  # need improvement
-    from django.http import HttpResponse
-    from django.core.exceptions import ObjectDoesNotExist
-
-    class AccountAlreadyConfirmed(Exception):
-        pass
-
-    if token is not None:
-        try:
-            user = Token.objects.get(key=token).user
-            if user.is_confirmed is True:
-                raise AccountAlreadyConfirmed
-            user.is_confirmed = True
-            user.save()
-            print(user)
-        except ObjectDoesNotExist:
-            print("Invalid Token")
-        except AccountAlreadyConfirmed:
-            print("Account already confirmed")
-    else:
-
-        try:
-            user = Token.objects.get(key=request.auth).user
-            if user.is_confirmed is True:
-                raise AccountAlreadyConfirmed
-
-            context = {
-                "username": request.user.username,
-                "url": "http://127.0.0.1:8000/auth/confirm/"
-                + str(request.auth)
-                + "/",
-            }
-            html_message = render_to_string(
-                "authentification/confirmation_email.html", context
-            )
-            plain_message = strip_tags(html_message)
-            send_mail(
-                "This is an account confirmation email",
-                plain_message,
-                EMAIL_FROM,
-                [request.user.username],
-                html_message=html_message,
-                fail_silently=False,
-            )
-            print(user)
-
-        except ObjectDoesNotExist:
-            print("Invalid Token")
-
-        except AccountAlreadyConfirmed:
-            print("Account already confirmed")
-    return HttpResponse(status=HTTP_200_OK)
