@@ -206,8 +206,9 @@ NOSE_ARGS = [
 
 
 EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = 'cfaed6a1dedea2'
-EMAIL_HOST_PASSWORD = '8529c0f3d31124'
+EMAIL_HOST_USER = '8fa52dce13cc57'
+if "MAILTRAP_PWD" in os.environ:
+    EMAIL_HOST_PASSWORD = os.environ["MAILTRAP_PWD"]
 EMAIL_PORT = '2525'
 
 
