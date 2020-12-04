@@ -43,6 +43,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'django_admin_env_notice',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -60,7 +61,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_gis",
     "rest_framework.authtoken",
+    'django_nose',
 ]
+
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # new
@@ -76,6 +80,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "brooze.urls"
 
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -87,6 +94,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django_admin_env_notice.context_processors.from_settings",
             ],
         },
     },
@@ -159,28 +167,56 @@ LEAFLET_CONFIG = {
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://192.168.1.41:3000",
 )
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ["www.nathan-mimoun.live", "nathan-mimoun.live", "projet13.nathan-mimoun.live","localhost","127.0.0.1"]
+ALLOWED_HOSTS = [
+    "www.nathan-mimoun.live",
+    "nathan-mimoun.live",
+    "projet13.nathan-mimoun.live",
+    "localhost",
+    "127.0.0.1",
+    "192.168.1.41",
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
 }
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-if 'EMAIL_PWD' in os.environ:
-    EMAIL_HOST_PASSWORD = os.environ["EMAIL_PWD"]
-    print('EMAIL_HOST_PASSWORD environment variable is already defined. Value =', os.environ['EMAIL_PWD'])
-else:
-    EMAIL_HOST_PASSWORD = "123456789"
-    print('EMAIL_HOST_PASSWORD environment variable is not defined. Default Value =', EMAIL_HOST_PASSWORD)
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+
+# Tell nose to measure coverage on the 'authentification' , 'main' and 'shops' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=authentification, main, shops',
+    '--cover-html',
+]
+
+
+#####################
+#   email setting   #
+#####################
+
+
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = '8fa52dce13cc57'
+if "MAILTRAP_PWD" in os.environ:
+    EMAIL_HOST_PASSWORD = os.environ["MAILTRAP_PWD"]
+EMAIL_PORT = '2525'
+
+
+#################################
+#   Admin env. notice setting   #
+#################################
+
+
+ENVIRONMENT_FLOAT = True
+ENVIRONMENT_NAME = "Development server"
+ENVIRONMENT_COLOR = "#1dc022"

@@ -20,6 +20,9 @@ django-cors-headers = "*"
 djangorestframework = "*"
 djangorestframework-gis = "*"
 autopep8 = "*"
+django-nose = "*"
+django-admin-env-notice = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "*"

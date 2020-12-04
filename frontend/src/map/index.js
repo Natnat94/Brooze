@@ -1,7 +1,7 @@
 import React from 'react';
-import { UnlogMap } from './components';
+import  UnlogMap from './components/components';
 
-
+import './maprenderer.css';
 
 
 class Map extends React.Component {

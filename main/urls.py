@@ -6,6 +6,7 @@ from .views import (
     friends_list,
     friends_location,
     users_list,
+    remove_friends_list,
 )
 
 
@@ -20,5 +21,7 @@ urlpatterns = [
     path(
         "friends_location/", friends_location
     ),  # display the user's friends location
+    path("users_list/<str:query>", users_list),
     path("users_list/", users_list),  # display the users list
+    path("remove_friend/", remove_friends_list), # remove a user from the friend list
 ]

@@ -1,6 +1,7 @@
 # Brooze (Project 13)
 
-[![Build Status](https://travis-ci.org/Natnat94/Brooze.svg?branch=master)](https://travis-ci.org/Natnat94/project_13)
+[![Build Status](https://travis-ci.org/Natnat94/Brooze.svg?branch=master)](https://travis-ci.org/Natnat94/brooze)
+![Codecov](https://img.shields.io/codecov/c/github/natnat94/brooze)
 
 Proudly served at [Project13-website](https://projet13.nathan-mimoun.live)
 
@@ -39,9 +40,9 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
 - Populate the DB:
     
     ```pipenv run manage.py migrate
-    pipenv run manage.py shell
-    from shops.load import run
-    run()
+    pipenv run python
+    from shops import load
+    load.run()
     ```
     
 - Run the webservers:
@@ -81,9 +82,9 @@ See [Here](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/tutorial/#setti
 ### Version 0.7: (mainly backend improvement)
   - [x] Add clustering on the map
   - [x] Confirmation email
-  - [ ] Enhancing the token use with an additional short term token
+  - [x] Enhancing the token use with an additional short term token
   - [x] Adding a phone number into the user profile
-  - [ ] Fixing the sketchy bars data 
+  - [ ] *Fixing the sketchy bars data* (postpone)
 
 ### Version 0.8: (mainly frontend improvement)
 

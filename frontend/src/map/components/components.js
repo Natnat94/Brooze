@@ -2,12 +2,12 @@ import L from 'leaflet';
 import React from 'react';
 import { GeoJSON, Map, TileLayer, Marker, Popup} from 'react-leaflet'; //Import React-Leaflet, who provides an abstraction of Leaflet as React components.
 import Control from 'react-leaflet-control';
-import LocateControl from './location_control/LocateControl';
-import { postData, getData } from './ApiDataFunc';
+import LocateControl from './LocateControl';
+import { postData, getData } from '../ApiDataFunc';
 import { customMarkerYellow, customMarkerRed } from './customMarker';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 
-import './maprenderer.css';
+
 
 
 //https://techiediaries.com/react-ajax
@@ -28,7 +28,7 @@ const locateOptions = {
 }
 
 
-export class UnlogMap extends React.Component {
+export default class UnlogMap extends React.Component {
   constructor(props) {
     super(props);
     this.handleLoginClick = this.handleLoginClick.bind(this);
@@ -46,6 +46,7 @@ export class UnlogMap extends React.Component {
 
   //Get asynchronously the GeoJSON Object, immediately after a component is mounted
   componentDidMount() {
+    
     //Connect to the api backend to get the GeoJSON Object.
     getData(this.props.mainurl + '/map/all', this.props.token)
       .then(data => this.setState({ barlist: data }))
@@ -138,7 +139,9 @@ export class UnlogMap extends React.Component {
     require('react-leaflet-markercluster/dist/styles.min.css');
     const position = [48.8597, 2.349];
     let button;
+    let locate;
     if (this.props.is_logged) {
+      locate = <LocateControl options={locateOptions} startDirectly/>;
       button = <Control position="bottomright" >
         <button onClick={
           this.findCoordinates
@@ -154,6 +157,7 @@ export class UnlogMap extends React.Component {
     } else {
       button2 = <LoginButton onClick={this.handleLoginClick} />;
     }
+
 
     return (
       <div id="map">
@@ -175,7 +179,7 @@ export class UnlogMap extends React.Component {
           </Marker> : ''}
           {this.state.match ? <GeoJSON key={Math.random()} data={this.state.match} pointToLayer={this.yellowPointer} onEachFeature={this.displayBarname} /> : ''}
           {/* {marker()} */}
-          <LocateControl options={locateOptions} />
+          {locate}
         </Map>
       </div>
     );

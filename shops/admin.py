@@ -13,6 +13,8 @@ class Shop(admin.OSMGeoAdmin):
     ]
     ordering = ["name", "addrpostcode"]
     modifiable = False
-
+    def save_model(self, request, obj, form, change):
+        #Return nothing to make sure user can't update any data
+        pass
 
 admin.site.register(Shops, Shop)

@@ -4,7 +4,7 @@ import './navbar.css'
 import { bubble as Menu } from 'react-burger-menu'
 import { postData } from '../map/ApiDataFunc'
 
-export class NavBar extends React.Component {
+export default class NavBar extends React.Component {
   /* this component manage the navigation bar 
   that is updated according to the 'is_logged' props
   value. */
@@ -54,9 +54,9 @@ export class NavBar extends React.Component {
         {this.props.is_logged ?
           (<>
             <a id="home" className="menu-item" href="/" onClick={event => this.handleClick(event, null)}><i className="fa fa-fw fa-star-o" /><span>Home</span></a>
-            <a id="logout" className="menu-item" href="/" onClick={event => this.logout((event))}> <i className="fa fa-fw fa-sign-out" /><span>Logout</span></a>
-            <a id="profil" className="menu-item" href="/" onClick={event => this.handleClick(event, 'password')}><i className="fa fa-fw fa-user" /><span>Profil</span></a>
+            <a id="profil" className="menu-item" href="/" onClick={event => this.handleClick(event, 'profile')}><i className="fa fa-fw fa-user" /><span>Profil</span></a>
             <a id="friends" className="menu-item" href="/" onClick={event => this.handleClick(event, 'friends')}><i className="fa fa-fw fa-address-book-o" /><span>Friends</span></a>
+            <a id="logout" className="menu-item" href="/" onClick={event => this.logout((event))}> <i className="fa fa-fw fa-sign-out" /><span>Logout</span></a>
           </>) :
           (<>
             <a id="home" className="menu-item" href="/" onClick={event => this.handleClick(event, null)}><i className="fa fa-fw fa-star-o" /><span>Home</span></a>

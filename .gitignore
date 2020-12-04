@@ -1,5 +1,5 @@
 .vscode
-titi.py
 user_profiles
 __py*
 .coverage
+cover/
