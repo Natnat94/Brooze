@@ -43,6 +43,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'django_admin_env_notice',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -93,6 +94,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django_admin_env_notice.context_processors.from_settings",
             ],
         },
     },
@@ -182,28 +184,12 @@ ALLOWED_HOSTS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
 }
-
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_HOST_USER = "apikey"  # this is exactly the value 'apikey'
-if "EMAIL_PWD" in os.environ:
-    EMAIL_HOST_PASSWORD = os.environ["EMAIL_PWD"]
-    print(
-        "EMAIL_HOST_PASSWORD environment variable is already defined. Value =",
-        os.environ["EMAIL_PWD"],
-    )
-else:
-    EMAIL_HOST_PASSWORD = "123456789"
-    print(
-        "EMAIL_HOST_PASSWORD environment variable is not defined. Default Value =",
-        EMAIL_HOST_PASSWORD,
-    )
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
 
 # Tell nose to measure coverage on the 'authentification' , 'main' and 'shops' apps
@@ -212,3 +198,24 @@ NOSE_ARGS = [
     '--cover-package=authentification, main, shops',
     '--cover-html',
 ]
+
+
+#####################
+#   email setting   #
+#####################
+
+
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = 'cfaed6a1dedea2'
+EMAIL_HOST_PASSWORD = '8529c0f3d31124'
+EMAIL_PORT = '2525'
+
+
+#################################
+#   Admin env. notice setting   #
+#################################
+
+
+ENVIRONMENT_FLOAT = True
+ENVIRONMENT_NAME = "Development server"
+ENVIRONMENT_COLOR = "#1dc022"
