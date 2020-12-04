@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 
 
 class Shops(models.Model):
+    node_id = models.BigIntegerField(null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     amenity = models.CharField(max_length=15, blank=True, null=True)
     addrhousenumber = models.CharField(max_length=5, blank=True, null=True)
@@ -9,3 +10,6 @@ class Shops(models.Model):
     addrcity = models.CharField(max_length=25, blank=True, null=True)
     addrpostcode = models.CharField(max_length=5, blank=True, null=True)
     geom = models.PointField()
+
+    class Meta:
+        verbose_name_plural = "shops"
