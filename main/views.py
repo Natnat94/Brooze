@@ -6,12 +6,52 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+)
+from rest_framework.response import Response
 
 from authentification.models import User
 
 
 def index(request):
     return render(request, "main/index.html")
+
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def users_list(request, query=""):
+    """ this function return the users list when the user is
+    authenticated.
+    The keys needed are:  """
+    # TODO: doit renvoyer un liste vide si 'query' est 'null'
+
+    users_to_exclude = [o.id for o in User.objects.get(auth_token=request.auth).friends.all()]
+    print(users_to_exclude)
+    users = (
+        User.objects.all()
+        .filter(username__icontains=query)  # TODO: doit pouvoir chercher aussi le num de tel
+        .values("username", "id", "phone")  # TODO: renvoie aussi l'image de l'utilisateur
+        .exclude(auth_token=request.auth)
+        .exclude(id__in=users_to_exclude)
+        .order_by("username")
+    )
+    return JsonResponse(list(users), safe=False)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
+
+
+
+
+
+
+# ----------------------------------------------------------
+#               interaction avec l'utilisateur
+# ----------------------------------------------------------
 
 
 @api_view()
@@ -54,16 +94,32 @@ def update_user_location(request):
     return HttpResponse(response_data, content_type="json")
 
 
-@api_view(["GET"])
+
+
+# ----------------------------------------------------------
+#               interaction avec amis
+# ----------------------------------------------------------
+
+
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def friends_location(request):
-    """ this function return the friend location of the user that is
-    authenticated.
+def remove_friends_list(request):
+    """ The POST method remove a friend from the user's list
+    from the JSON sent by the request.
     The keys needed are:  """
-    user = User.objects.get(auth_token=request.auth)
-    friends = user.friends.all()
-    response_data = serialize("geojson", friends)
-    return HttpResponse(response_data, content_type="json")
+    if request.method == "POST":
+        user = User.objects.get(auth_token=request.auth)
+        for i in request.data:
+            friend = User.objects.get(id=i["id"])
+            user.friends.remove(friend)
+        print(user.friends.all())
+        return Response(
+            {"message": "friends list updated !"}, status=HTTP_200_OK
+        )
+    else:
+        return Response(
+            {"error": "Invalid request"}, status=HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(["GET", "POST"])
@@ -76,11 +132,14 @@ def friends_list(request):
     The keys needed are:  """
     if request.method == "POST":
         user = User.objects.get(auth_token=request.auth)
-        user.friends.clear()
+        # user.friends.clear()
         for i in request.data:
             friend = User.objects.get(id=i["id"])
             user.friends.add(friend)
-        return JsonResponse({"message": "friends list updated !"})
+        print(user.friends.all())
+        return Response(
+            {"message": "friends list updated !"}, status=HTTP_200_OK
+        )
     else:
         user = User.objects.get(auth_token=request.auth)
         friends = (
@@ -91,14 +150,11 @@ def friends_list(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def users_list(request):
-    """ this function return the users list when the user is
+def friends_location(request):
+    """ this function return the friend location of the user that is
     authenticated.
     The keys needed are:  """
-    users = (
-        User.objects.all()
-        .values("username", "id")
-        .exclude(auth_token=request.auth)
-        .order_by("username")
-    )
-    return JsonResponse(list(users), safe=False)
+    user = User.objects.get(auth_token=request.auth)
+    friends = user.friends.all()
+    response_data = serialize("geojson", friends)
+    return HttpResponse(response_data, content_type="json")
