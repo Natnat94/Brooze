@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
 
 from authentification.models import User
 
@@ -21,7 +21,7 @@ class TestViews(APITestCase):
         response = self.client.post(url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsNotNone(response.data["token"])
+        self.assertIsNotNone(response.data["refresh"])
 
     def test_login_view_bad_password(self):
         url = reverse("login")
@@ -44,9 +44,13 @@ class TestViews(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(response.data["token"])
+        self.assertIsNotNone(response.data["access"])
         self.assertEqual(user.geom.coords, (48.864, 2.349))
 
     def test_change_password_failed(self):
+        """ test the error message of the 'change password' view
+        when the form is not valid (new passwords don't match) """
+
         user = User.objects.get(username="rien@g.com")
         client = APIClient()
         client.force_authenticate(user=user)
@@ -63,12 +67,17 @@ class TestViews(APITestCase):
         self.assertEqual(msg, "password_mismatch")
 
     def test_change_password_success(self):
+        """ test the ability of the view to change a password and renew
+        the 'access' token upon success"""
+
         client = APIClient()
         url = reverse("login")
         data = {"username": "rien@g.com", "password": "1X<ISRUkw+tuK"}
-        client.post(url, data, format="json")
-        old_token = Token.objects.get(user__username="rien@g.com")
-        client.credentials(HTTP_AUTHORIZATION="Token " + old_token.key)
+        response = client.post(url, data, format="json")
+        old_token = response.data["access"]
+        # test with the old token generator
+        # old_token = Token.objects.get(user__username="rien@g.com")
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + old_token)
 
         url = reverse("change_password")
         data = {
@@ -77,7 +86,7 @@ class TestViews(APITestCase):
             "new_password2": "1X<ISRUkw+tK",
         }
         resp = client.post(url, data, format="json")
-        new_token = Token.objects.get(user__username="rien@g.com")
+        new_token = resp.data["access"]
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
