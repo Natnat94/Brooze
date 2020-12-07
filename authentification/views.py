@@ -250,12 +250,15 @@ def change_password(request):
     form = PasswordChangeForm(request.user, request.data)
     if form.is_valid():
         user = form.save()
-        request.auth.delete()
-        token, _ = Token.objects.get_or_create(user=user)
+        refresh = RefreshToken.for_user(user)
+        # request.auth.delete()
+        # token, _ = Token.objects.get_or_create(user=user)
         return Response(
             {
                 "message": "le mot de passe a était mis à jour",
-                "token": token.key,
+                # "token": token.key,
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
             },
             status=HTTP_200_OK,
         )
