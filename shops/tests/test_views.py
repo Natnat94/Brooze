@@ -61,15 +61,15 @@ class TestViews(APITestCase):
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_match(self):
-        self.client.post(
+        identification = self.client.post(
             reverse("login"),
             {"username": "1@g.com", "password": "1X<ISRUkw+tuK"},
             format="json",
         )
-        token = Token.objects.get(user__username="1@g.com")
+        token = identification.data['access']
 
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + token)
         resp = client.get(reverse("resultat"))
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
