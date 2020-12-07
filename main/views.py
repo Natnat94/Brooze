@@ -21,8 +21,6 @@ def index(request):
     return render(request, "main/index.html")
 
 
-
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def users_list(request, query=""):
@@ -31,22 +29,22 @@ def users_list(request, query=""):
     The keys needed are:  """
     # TODO: doit renvoyer un liste vide si 'query' est 'null'
 
-    users_to_exclude = [o.id for o in User.objects.get(auth_token=request.auth).friends.all()]
-    print(users_to_exclude)
+    users_to_exclude = [
+        o.id for o in User.objects.get(id=request.user.id).friends.all()
+    ]
     users = (
         User.objects.all()
-        .filter(username__icontains=query)  # TODO: doit pouvoir chercher aussi le num de tel
-        .values("username", "id", "phone")  # TODO: renvoie aussi l'image de l'utilisateur
-        .exclude(auth_token=request.auth)
+        .filter(
+            username__icontains=query
+        )  # TODO: doit pouvoir chercher aussi le num de tel
+        .values(
+            "username", "id", "phone"
+        )  # TODO: renvoie aussi l'image de l'utilisateur
+        .exclude(id=request.user.id)
         .exclude(id__in=users_to_exclude)
         .order_by("username")
     )
-    return JsonResponse(list(users), safe=False)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-
-
-
-
-
+    return JsonResponse(list(users), safe=False)
 
 
 # ----------------------------------------------------------
@@ -59,7 +57,7 @@ def users_list(request, query=""):
 def user_detail(request):
     """ this function return the authenticated user's details in
     GEOJSON format"""
-    user = User.objects.filter(auth_token=request.auth)
+    user = User.objects.filter(id=request.user.id)
     response_data = serialize(
         "geojson",
         user,
@@ -81,9 +79,7 @@ def update_user_location(request):
     """ this function update the authenticated user's position in the DB
     and return the updated profile.
     The keys needed are: 'long', 'lat' """
-    user = User.objects.filter(
-        auth_token=request.auth
-    )  # Selectionne l'utilisateur
+    user = User.objects.filter(id=request.user.id)  # Selectionne l'utilisateur
     data = json.loads(request.body)  # charge le contenu JSON de POST
     pnt = Point(
         data["long"], data["lat"]
@@ -92,8 +88,6 @@ def update_user_location(request):
     user.update(geom=pnt, last_name="mimoun")  # mets a jour sa position
     response_data = serialize("geojson", user)
     return HttpResponse(response_data, content_type="json")
-
-
 
 
 # ----------------------------------------------------------
@@ -108,11 +102,10 @@ def remove_friends_list(request):
     from the JSON sent by the request.
     The keys needed are:  """
     if request.method == "POST":
-        user = User.objects.get(auth_token=request.auth)
+        user = User.objects.get(id=request.user.id)
         for i in request.data:
             friend = User.objects.get(id=i["id"])
             user.friends.remove(friend)
-        print(user.friends.all())
         return Response(
             {"message": "friends list updated !"}, status=HTTP_200_OK
         )
@@ -131,7 +124,7 @@ def friends_list(request):
     authenticated.
     The keys needed are:  """
     if request.method == "POST":
-        user = User.objects.get(auth_token=request.auth)
+        user = request.user
         # user.friends.clear()
         for i in request.data:
             friend = User.objects.get(id=i["id"])
@@ -141,7 +134,7 @@ def friends_list(request):
             {"message": "friends list updated !"}, status=HTTP_200_OK
         )
     else:
-        user = User.objects.get(auth_token=request.auth)
+        user = request.user
         friends = (
             user.friends.all().values("username", "id").order_by("username")
         )
@@ -154,7 +147,7 @@ def friends_location(request):
     """ this function return the friend location of the user that is
     authenticated.
     The keys needed are:  """
-    user = User.objects.get(auth_token=request.auth)
+    user = request.user
     friends = user.friends.all()
     response_data = serialize("geojson", friends)
     return HttpResponse(response_data, content_type="json")
