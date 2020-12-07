@@ -10,7 +10,8 @@ from authentification.models import User
 
 class MainViews(APITestCase):
     """ class that test the view of the 'main' app """
-
+    init_token = None
+    
     @classmethod
     def setUpTestData(cls):
         cls.test_user = User.objects.create_user(
@@ -26,23 +27,26 @@ class MainViews(APITestCase):
     def setUp(self):
         url = reverse("login")
         data = {"username": "rien@g.com", "password": "1X<ISRUkw+tuK"}
-        self.client.post(url, data, format="json")
+
+        resp = self.client.post(url, data, format="json")
+        self.init_token = resp.data['access'] 
+
 
     def test_user_detailed_profil(self):
-        token = Token.objects.get(user__username=MainViews.test_user)
+        # token = Token.objects.get(user__username=MainViews.test_user)
 
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + self.init_token)
         response = client.get("/user/")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(response.content)
 
     def test_user_updated_location(self):
-        token = Token.objects.get(user__username=MainViews.test_user)
+        # token = Token.objects.get(user__username=MainViews.test_user)
 
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + self.init_token)
         data = {"long": 42, "lat": 12}
         response = client.post("/user/update/", data, format="json")
 
@@ -53,10 +57,10 @@ class MainViews(APITestCase):
         self.assertEqual(response_data, [42.0, 12.0])
 
     def test_user_updated_friends(self):
-        token = Token.objects.get(user__username="rien@g.com")
+        # token = Token.objects.get(user__username="rien@g.com")
 
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + self.init_token)
         rsp_old = client.get("/user/friends_list/")
 
         data = [{"id": 2}, {"id": 3}]
@@ -69,10 +73,10 @@ class MainViews(APITestCase):
         self.assertIs(len(data), 2)
 
     def test_users_list(self):
-        token = Token.objects.get(user__username="rien@g.com")
+        # token = Token.objects.get(user__username="rien@g.com")
 
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + self.init_token)
 
         response = client.get("/user/users_list/")
 
@@ -80,10 +84,10 @@ class MainViews(APITestCase):
         self.assertIsNotNone(response.content)
 
     def test_users_friends_location(self):
-        token = Token.objects.get(user__username="rien@g.com")
+        # token = Token.objects.get(user__username="rien@g.com")
 
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Bearer " + self.init_token)
 
         response = client.get("/user/friends_location/")
 

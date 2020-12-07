@@ -19,7 +19,7 @@ def api(request):
     according to the authenticated user's and user's friends
     position.
     The keys needed are: '' """
-    user = User.objects.get(auth_token=request.auth)
+    user = request.user
     best_match = Matchmaker().find_shop(id=user.id)
     best_shop = Shops.objects.filter(pk=best_match)
     response_data = serialize("geojson", best_shop)

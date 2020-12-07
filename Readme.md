@@ -1,6 +1,6 @@
 # Brooze (Project 13)
 
-[![Build Status](https://travis-ci.org/Natnat94/Brooze.svg?branch=master)](https://travis-ci.org/Natnat94/brooze)
+[![Build Status](https://travis-ci.org/Natnat94/Brooze.svg?branch=staging)](https://travis-ci.org/Natnat94/brooze)
 ![Codecov](https://img.shields.io/codecov/c/github/natnat94/brooze)
 
 Proudly served at [Project13-website](https://projet13.nathan-mimoun.live)
