@@ -8,7 +8,7 @@ import InputIcon from '@material-ui/icons/Input';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import LaunchIcon from '@material-ui/icons/Launch';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import { postData } from '../map/ApiDataFunc'
+import { postData } from '../main/map/ApiDataFunc'
 
 import './navbar.css'
 

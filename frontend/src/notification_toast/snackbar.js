@@ -2,7 +2,6 @@ import React from 'react';
 import './snackbar.css';
 
 
-
 class SnackBar extends React.Component {
     myFunction = () => {
         // Get the snackbar DIV

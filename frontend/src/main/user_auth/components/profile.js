@@ -17,6 +17,7 @@ class Profile extends React.Component {
         super(props);
         this.state = {
         };
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount() {
@@ -25,6 +26,11 @@ class Profile extends React.Component {
             .then(data => this.setState(data))
             .catch(error => console.error('Error: \n' + error.detail))
     }
+
+    handleClick(e, data) {
+        e.preventDefault();
+        this.props.handler('mode', data)
+      }
 
     myChangeHandler = (event) => {
         let nam = event.target.name;
@@ -50,7 +56,7 @@ class Profile extends React.Component {
                         {/* <p>Update your profile </p> */}
                         {/* TODO: need to be able to upload a profile picture */}
                         <img src={require('./icon3.png')} className="fadeIn first" id="icon" alt="User Icon" style={borderstyle} /> <br /><br />
-                        <input type="button" id="change_password" className="fadeIn second" value="Change password" />
+                        <input type="button" id="change_password" className="fadeIn second" value="Change password" onClick={event => this.handleClick(event, 'password')}/>
                         <input type="text" id="fname" className="fadeIn second" defaultValue={this.state.first_name} name='first_name' onChange={this.myChangeHandler} autoComplete="fname" placeholder="First name" />
                         <input type="text" id="lname" className="fadeIn third" defaultValue={this.state.last_name} name='last_name' onChange={this.myChangeHandler} autoComplete="lname" placeholder="Last name" />
                         <br />
