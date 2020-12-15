@@ -15,10 +15,14 @@ class SnackBar extends React.Component {
         setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
         this.props.handler('snackbar', false)
     }
-
-    render() {if (this.props.snackbar) {
-        this.myFunction()
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.snackbar !== prevProps.snackbar) {
+            if (this.props.snackbar) {
+                this.myFunction()
+            }
+        }
     }
+    render() {
         return (
             <>
             <div id="snackbar">{this.props.text}</div>
