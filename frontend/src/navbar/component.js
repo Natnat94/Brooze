@@ -2,7 +2,7 @@ import React from 'react'
 
 import './navbar.css'
 import { bubble as Menu } from 'react-burger-menu'
-import { postData } from '../map/ApiDataFunc'
+import { postData } from '../main/map/ApiDataFunc'
 
 export default class NavBar extends React.Component {
   /* this component manage the navigation bar 

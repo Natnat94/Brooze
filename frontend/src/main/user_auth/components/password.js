@@ -47,9 +47,9 @@ class PasswordChange extends React.Component {
 
     valideResponse = (json) => {
         // Do stuff with the JSON
-        this.props.handler('token', 'Token ' + json.token);
-        localStorage.setItem("token", json.token)
-        this.props.handler('mode', null);
+        this.props.handler('token', json.access);
+        localStorage.setItem("token", json.access)
+        this.props.handler('mode', 'home');
         this.props.handler('snackbar_text', json.message);
         this.props.handler('snackbar', true);
     }
@@ -83,7 +83,7 @@ class PasswordChange extends React.Component {
                 <div className="wrapper fadeInDown">
                     <div id="formContent">
                         <div id='formHeader'>
-                            <span className="closebtn" onClick={() => this.props.handler('mode', null)}>&times;</span>
+                            <span className="closebtn" onClick={() => this.props.handler('mode', 'home')}>&times;</span>
                         </div>
                         <div className="fadeIn first">
                             <img src={require('./icon3.png')} id="icon" alt="User Icon" />

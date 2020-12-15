@@ -3,7 +3,7 @@ import './login.css';
 import LogIn from './components/login'
 import PasswordChange from './components/password';
 import SignUp from './components/sign_up';
-import Friends from './components/friends';
+import AddFriends from '../friends/add_friend';
 import Profile from './components/profile';
 
 
@@ -16,7 +16,7 @@ class Auth extends React.Component {
         switch(param){
             case 'password': return <PasswordChange {...this.props} />;
             case 'login': return <LogIn {...this.props} />;
-            case 'friends': return <Friends {...this.props} /> ;
+            case 'friends': return <AddFriends {...this.props} /> ;
             case 'register': return <SignUp {...this.props} />;
             case 'profile': return <Profile {...this.props} />; 
             default: return null;

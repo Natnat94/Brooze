@@ -48,7 +48,7 @@ export default class UnlogMap extends React.Component {
   componentDidMount() {
     
     //Connect to the api backend to get the GeoJSON Object.
-    getData(this.props.mainurl + '/map/all', this.props.token)
+    getData(this.props.mainurl + '/map/all')
       .then(data => this.setState({ barlist: data }))
       .catch(error => console.error('Error: \n' + error.detail))
   }

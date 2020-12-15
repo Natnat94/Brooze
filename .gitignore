@@ -3,4 +3,4 @@ user_profiles
 __py*
 .coverage
 cover/
-*.env
+*.env*
