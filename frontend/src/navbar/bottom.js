@@ -32,9 +32,9 @@ const logout = (props) => {
 
 const valideResponse = (props, json) => {
     // Do stuff with the JSON
-    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     props.handler('is_logged', false);
-    props.handler('token', null);
+    props.handler('refresh_token', null);
     props.handler('mode', null);
     props.handler('snackbar_text', json.message);
     props.handler('snackbar', true);
@@ -42,10 +42,10 @@ const valideResponse = (props, json) => {
 }
 const logError = (props, error) => {
     // Do stuff with the error
-    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     console.error('Error: \n' + error.detail)
     props.handler('is_logged', false);
-    props.handler('token', null);
+    props.handler('refresh_token', null);
 }
 
 export const LabelBottomNavigation = (props) => {

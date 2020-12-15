@@ -24,13 +24,22 @@ class Profile extends React.Component {
         //Connect to the api backend to get the GeoJSON Object.
         getData(this.props.mainurl + '/auth/profil/', this.props.token)
             .then(data => this.setState(data))
-            .catch(error => console.error('Error: \n' + error.detail))
+            .catch(error => { console.error('Error: \n' + error.detail); this.props.handler('error_access', true) })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.token !== prevProps.token) {
+            getData(this.props.mainurl + '/auth/profil/', this.props.token)
+                .then(data => this.setState(data))
+                .catch(error => { console.error('Error: \n' + error.detail); this.props.handler('error_access', true) })
+        }
+
     }
 
     handleClick(e, data) {
         e.preventDefault();
         this.props.handler('mode', data)
-      }
+    }
 
     myChangeHandler = (event) => {
         let nam = event.target.name;
@@ -56,7 +65,7 @@ class Profile extends React.Component {
                         {/* <p>Update your profile </p> */}
                         {/* TODO: need to be able to upload a profile picture */}
                         <img src={require('./icon3.png')} className="fadeIn first" id="icon" alt="User Icon" style={borderstyle} /> <br /><br />
-                        <input type="button" id="change_password" className="fadeIn second" value="Change password" onClick={event => this.handleClick(event, 'password')}/>
+                        <input type="button" id="change_password" className="fadeIn second" value="Change password" onClick={event => this.handleClick(event, 'password')} />
                         <input type="text" id="fname" className="fadeIn second" defaultValue={this.state.first_name} name='first_name' onChange={this.myChangeHandler} autoComplete="fname" placeholder="First name" />
                         <input type="text" id="lname" className="fadeIn third" defaultValue={this.state.last_name} name='last_name' onChange={this.myChangeHandler} autoComplete="lname" placeholder="Last name" />
                         <br />

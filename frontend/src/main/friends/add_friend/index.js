@@ -29,7 +29,7 @@ class AddFriends extends React.Component {
         //Connect to the api backend to get the list of users Object.
         getData(this.props.mainurl + '/user/users_list/', this.props.token)
             .then(data => this.setState({ users: data }))
-            .catch(error => console.error('Error: \n' + error.detail))
+            .catch(error => {console.error('Error: \n' + error.detail); this.props.handler('error_access', true)})
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -45,6 +45,12 @@ class AddFriends extends React.Component {
             getData(this.props.mainurl + '/user/users_list/' + this.state.searchQuery, this.props.token)
                 .then(data => this.setState({ users: data }))
                 .catch(error => console.error('Error: \n' + error.detail))
+        }
+
+        if (this.props.token !== prevProps.token) {
+            getData(this.props.mainurl + '/user/users_list/', this.props.token)
+            .then(data => this.setState({ users: data }))
+            .catch(error => {console.error('Error: \n' + error.detail); this.props.handler('error_access', true)})
         }
     }
 

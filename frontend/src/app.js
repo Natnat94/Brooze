@@ -4,21 +4,19 @@ import { NavBar } from './navbar';
 import MobileNav from './navbar';
 import SnackBar from './notification_toast/snackbar';
 import Main from './main'
-
-
-let temptoken
-temptoken = "Token ea6bab4b6f7225985f239e7f665a6a752609e14a"
+import { postData } from './main/map/ApiDataFunc'
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             is_logged: false,
-            token: temptoken,
+            token: null,
             mode: "home",
             mainurl: process.env.REACT_APP_BASE_URL,
             snackbar: false,
-            snackbar_text: null
+            snackbar_text: null,
+            error_access: false
         };
 
         this.handler = this.handler.bind(this)
@@ -29,12 +27,24 @@ class App extends React.Component {
             [name]: value,
         })
     }
-
     componentDidMount() {
 
         // check if the token is already saved into the local storage if the user is not logged
-        if ((!this.state.is_logged) && (localStorage.getItem('token'))) {
-            this.setState({ token: localStorage.getItem('token'), is_logged: true })
+        if ((!this.state.is_logged) && (localStorage.getItem('refresh_token'))) {
+            this.setState({ refresh_token: localStorage.getItem('refresh_token'), is_logged: true })
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.error_access !== prevState.error_access) {
+            if (this.state.error_access) {
+                console.log("Invalid access token")
+                let token = { refresh: this.state.refresh_token }
+                postData(this.state.mainurl + '/auth/token/refresh/', token, '')
+                    .then(result => this.setState({ token: "Bearer " + result.access }))
+                    .catch(error => { localStorage.removeItem('refresh_token'); this.setState({ is_logged: false })})
+                this.setState({error_access: false})
+            }
         }
     }
 
