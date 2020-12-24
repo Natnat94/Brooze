@@ -8,7 +8,7 @@ import InputIcon from '@material-ui/icons/Input';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import LaunchIcon from '@material-ui/icons/Launch';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import { postData } from '../main/map/ApiDataFunc'
+import { postData } from '../main/map/ApiDataFunc';
 
 import './navbar.css'
 
@@ -23,32 +23,19 @@ const useStyles = makeStyles({
 });
 
 const logout = (props) => {
-    // eslint-disable-next-line
     postData(props.mainurl + '/auth/logout/', '', props.token)
-        .then(result => 
-            // valideResponse(props, result)
+        .then(result => {
+            props.snackBar(result.message)
             props.logOut()
+        }
             )
         .catch(error => {
             props.logOut();
+            props.snackBar('Error: \n' + error.detail)
             console.error('Error: \n' + error.detail)
-            // logError(props, error)
         })
 }
 
-    // eslint-disable-next-line
-const valideResponse = (props, json) => {
-    props.logOut();
-    props.handler('snackbar_text', json.message);
-    props.handler('snackbar', true);
-
-}
-    // eslint-disable-next-line
-const logError = (props, error) => {
-    // Do stuff with the error
-    props.logOut();
-    console.error('Error: \n' + error.detail)
-}
 
 export const LabelBottomNavigation = (props) => {
     const classes = useStyles();
