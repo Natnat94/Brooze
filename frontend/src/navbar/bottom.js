@@ -25,50 +25,48 @@ const useStyles = makeStyles({
 const logout = (props) => {
     // eslint-disable-next-line
     postData(props.mainurl + '/auth/logout/', '', props.token)
-        .then(result => valideResponse(props, result))
-        .catch(error => logError(props, error))
+        .then(result => 
+            // valideResponse(props, result)
+            props.logOut()
+            )
+        .catch(error => {
+            props.logOut();
+            console.error('Error: \n' + error.detail)
+            // logError(props, error)
+        })
 }
 
-
+    // eslint-disable-next-line
 const valideResponse = (props, json) => {
-    // Do stuff with the JSON
-    localStorage.removeItem('refresh_token');
-    props.handler('is_logged', false);
-    props.handler('refresh_token', null);
-    props.handler('mode', null);
+    props.logOut();
     props.handler('snackbar_text', json.message);
     props.handler('snackbar', true);
 
 }
+    // eslint-disable-next-line
 const logError = (props, error) => {
     // Do stuff with the error
-    localStorage.removeItem('refresh_token');
+    props.logOut();
     console.error('Error: \n' + error.detail)
-    props.handler('is_logged', false);
-    props.handler('refresh_token', null);
 }
 
 export const LabelBottomNavigation = (props) => {
     const classes = useStyles();
     const [value, setValue] = React.useState('recents');
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-        props.handler('mode', newValue);
-    };
     if (props.is_logged) {
         return (
-            <BottomNavigation value={value} onChange={handleChange} className={classes.root} showLabels>
+            <BottomNavigation value={value} onChange={(e, newValue) => props.onModeChange(newValue)} className={classes.root} showLabels>
                 <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
                 <BottomNavigationAction label="Profile" value="profile" icon={<AccountBoxIcon />} />
                 <BottomNavigationAction label="Friends" value="friends" icon={<PeopleAltIcon />} />
-                <BottomNavigationAction label="LogOut" value="logout" onClick={() => { logout(props) }} icon={<LaunchIcon />} />
+                <BottomNavigationAction label="LogOut" value="home" onClick={() => { logout(props) }} icon={<LaunchIcon />} />
             </BottomNavigation>
         );
 
     }
     return (
-        <BottomNavigation value={value} onChange={handleChange} className={classes.root} showLabels>
+        <BottomNavigation value={value} onChange={(e, newValue) => props.onModeChange(newValue)} className={classes.root} showLabels>
             <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
             <BottomNavigationAction label="Register" value="register" icon={<MoodIcon />} />
             <BottomNavigationAction label="LogIn" value="login" icon={<InputIcon />} />
