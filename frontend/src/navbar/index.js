@@ -1,6 +1,5 @@
-// import { NavBar } from './component';
-import { LabelBottomNavigation } from './bottom';
-import NavBar from './component';
+import { LabelBottomNavigation } from './mobile';
+import NavBar from './big_screen';
 
 export {NavBar};
 export default LabelBottomNavigation;
